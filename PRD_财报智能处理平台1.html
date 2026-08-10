@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PRD_财报智能处理平台.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="财报智能处理平台-prd">财报智能处理平台 PRD</h1>
+<blockquote>
+<p><strong>版本</strong>：v5.0<br>
+<strong>日期</strong>：2026-08-10<br>
+<strong>状态</strong>：草案<br>
+<strong>目标市场</strong>：A股、港股<br>
+<strong>基础平台</strong>：直接基于 dayu-agent 扩展<br>
+<strong>调度层</strong>：Prefect（pipeline 自动化编排）<br>
+<strong>分析层</strong>：DuckDB + dbt（指标衍生加工）</p>
+</blockquote>
+<hr>
+<h2 id="1-背景与目标">1. 背景与目标</h2>
+<h3 id="11-背景">1.1 背景</h3>
+<p>A股与港股的财报数据散落在巨潮资讯网（A股）、披露易（港股）等公开平台，以 PDF 为主，格式不统一、表格结构差异大。dayu-agent 已经具备完整的财报下载链路和多轮交互分析能力，但存在两个限制：</p>
+<ul>
+<li><strong>PDF 转换引擎受限</strong>：当前使用 Docling 将 PDF 转为结构化 JSON，对中文财报表格还原度不够理想</li>
+<li><strong>缺少结构化指标提取与修正闭环</strong>：当前 FinsToolService 全部只读，无法通过 Chat 指令修正已提取的指标</li>
+</ul>
+<h3 id="12-目标">1.2 目标</h3>
+<p>本项目的核心目标是在 dayu-agent 内部完成三件事：</p>
+<ol>
+<li><strong>Docling → MinerU 替换</strong>：将 PDF 转 Markdown 的底层引擎从 Docling 替换为 MinerU，提升中文财报表格还原质量</li>
+<li><strong>指标提取与人工修正闭环</strong>：复用 dayu-agent 的 Chat + Streamlit + Agent + Host 全栈能力，通过工具注入实现自然语言驱动的指标提取和修正</li>
+<li><strong>Prefect 调度层集成</strong>：使用 Prefect 实现 pipeline 的自动化调度，支持跨 ticker 批量下载、转换、指标提取，提供重试、缓存、并发控制、定时调度能力</li>
+</ol>
+<p><strong>一期重心</strong>（当前版本）：</p>
+<ol>
+<li>MinerU 集成：新建 MinerU 转换模块，替换 Docling 作为 PDF → Markdown 的转换引擎</li>
+<li>指标提取：通过 Agent + scene + 工具注入，让 LLM 从转换后的 Markdown 财报中提取标准化指标</li>
+<li>指标修正：复用 ChatService 多轮会话 + Streamlit Chat UI，通过写工具注入实现自然语言驱动的指标修正</li>
+<li>Streamlit 展示：扩展 Streamlit 页面，展示已提取指标和修正历史</li>
+<li>Prefect 调度：新建 Prefect flow/task 层，包装 download/process/指标提取等管线操作，实现批量自动化调度</li>
+<li>衍生指标加工：基于 DuckDB + dbt 实现衍生指标计算 pipeline，与原始指标共享 DuckDB 文件，由 Prefect 统一调度</li>
+</ol>
+<p><strong>二期展望</strong>（不在本期范围）：</p>
+<ul>
+<li>衍生指标自动生成（从指标定义模板自动生成 dbt model 和 metric_mapping seed）</li>
+<li>多维指标组合选股</li>
+<li>自动化数据质量验证规则引擎</li>
+<li>衍生指标 Streamlit 可视化展示</li>
+<li>跨市场衍生计算（含汇率换算）</li>
+</ul>
+<h3 id="13-关键架构决策直接基于-dayu-agent-扩展">1.3 关键架构决策：直接基于 dayu-agent 扩展</h3>
+<h4 id="131-决策理由">1.3.1 决策理由</h4>
+<p>dayu-agent 已有的 <code>UI → Service → Host → Agent</code> 四层架构天然支撑本项目需求：</p>
+<table>
+<thead>
+<tr>
+<th>需求环节</th>
+<th>dayu-agent 已有能力</th>
+<th>复用方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>财报下载</td>
+<td>A股巨潮下载器、港股披露易下载器、CN pipeline 完整链路、ticker 归一化、并发治理、中断恢复</td>
+<td><strong>零改动</strong></td>
+</tr>
+<tr>
+<td>PDF 转 Markdown</td>
+<td>Docling 转换引擎已收敛到 <code>docling_export.py</code> 单一入口，<code>ProcessorRegistry</code> 按后缀自动路由</td>
+<td><strong>替换底层引擎</strong>，上层自动切换</td>
+</tr>
+<tr>
+<td>指标提取</td>
+<td>Agent + Host + scene manifest + 工具注入体系完整</td>
+<td><strong>新增工具 + 新增 scene</strong></td>
+</tr>
+<tr>
+<td>人工修正</td>
+<td>ChatService 多轮会话、Streamlit 流式 Chat UI、工具注入机制</td>
+<td><strong>新增写工具 + 扩展 scene</strong></td>
+</tr>
+<tr>
+<td>Streamlit 展示</td>
+<td>filing_tab 已有财报列表展示、chat_tab 已有流式对话</td>
+<td><strong>扩展页面</strong></td>
+</tr>
+<tr>
+<td>批量调度</td>
+<td>无内置批处理/定时调度框架</td>
+<td><strong>集成 Prefect</strong>（新建调度层）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="132-docling--mineru-替换可行性">1.3.2 Docling → MinerU 替换可行性</h4>
+<p>dayu-agent 的 Docling 集成已经高度收敛，替换为 MinerU 的改动集中在 <code>fins/pipelines</code> 层，不触及 <code>engine/processors</code> 和 <code>fins/processors</code>：</p>
+<p><strong>收敛点分析</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>现状</th>
+<th>替换影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>转换入口</td>
+<td><code>dayu/fins/docling_export.py</code> 是唯一收敛点，导出 <code>convert_pdf_bytes_to_docling_json_bytes()</code></td>
+<td>新建 <code>mineru_export.py</code> 替代</td>
+</tr>
+<tr>
+<td>转换运行时</td>
+<td><code>dayu/docling_runtime.py</code> 672 行，含二维回退策略</td>
+<td>新建 MinerU 运行时模块</td>
+</tr>
+<tr>
+<td>下载链路注入</td>
+<td><code>CnPipeline.__init__</code> 默认注入 <code>convert_pdf_bytes_to_docling_json_bytes</code>，<code>PdfToDoclingJsonBytes = Callable[[bytes, str], bytes]</code></td>
+<td>改注入函数和类型别名</td>
+</tr>
+<tr>
+<td>产出物</td>
+<td><code>_docling.json</code>（结构化 JSON），被 <code>DoclingProcessor.supports()</code> 按后缀路由</td>
+<td>变为 <code>.md</code>，被 <code>MarkdownProcessor.supports()</code> 按后缀路由</td>
+</tr>
+<tr>
+<td>Upload 链路</td>
+<td><code>DoclingUploadService</code> 内部调用 <code>convert_pdf_bytes_to_docling_payload()</code></td>
+<td>类名和内部调用泛化</td>
+</tr>
+<tr>
+<td>source upsert 校验</td>
+<td><code>cn_download_source_upsert.py:238</code> 硬校验 <code>primary_document.endswith(&quot;_docling.json&quot;)</code></td>
+<td><strong>必须放宽</strong>为允许 <code>.md</code></td>
+</tr>
+<tr>
+<td>Processor 路由</td>
+<td><code>ProcessorRegistry</code> 按 <code>supports()</code> 匹配后缀，priority 排序</td>
+<td><strong>零改动</strong>：<code>.md</code> 自动命中 <code>FinsMarkdownProcessor</code>(priority=100)</td>
+</tr>
+<tr>
+<td>FinsMarkdownProcessor</td>
+<td><code>relabel_tables(self._tables)</code> 已走无 Docling 依赖路径</td>
+<td><strong>零改动</strong></td>
+</tr>
+<tr>
+<td>FinsToolService</td>
+<td><code>_create_processor()</code> 通过 <code>get_primary_source()</code> 读 <code>primary_document</code> 指向的文件</td>
+<td><strong>零改动</strong></td>
+</tr>
+<tr>
+<td>web_fetch 链路</td>
+<td><code>web_fetch_orchestrator.py</code> 独立调用 Docling 转 Markdown</td>
+<td><strong>可选改动</strong>，不影响 fins 链路</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键结论</strong>：</p>
+<ol>
+<li><code>ProcessorRegistry</code> 的 <code>supports()</code> 机制天然支持引擎切换——产出物从 <code>_docling.json</code> 变为 <code>.md</code> 后，<code>FinsDoclingProcessor</code> 不再被命中，<code>FinsMarkdownProcessor</code> 自动接管</li>
+<li><code>FinsMarkdownProcessor</code> 已经完整支持 Markdown 处理（含 <code>relabel_tables</code>），不需要任何修改</li>
+<li><code>FinsToolService</code> 的 processor 路由逻辑完全不需要改</li>
+<li><code>engine/processors/</code> 层完全不需要改</li>
+</ol>
+<h4 id="133-替换改动量估算">1.3.3 替换改动量估算</h4>
+<table>
+<thead>
+<tr>
+<th>改动区域</th>
+<th>改动量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新建 MinerU 运行时模块</td>
+<td>~250 行</td>
+<td><code>dayu/fins/mineru_export.py</code>，提供 <code>convert_pdf_bytes_to_markdown_bytes(raw_data, stream_name) -&gt; bytes</code>，内含 PDF 拆分 → MinerU 转换 → Markdown 合并</td>
+</tr>
+<tr>
+<td>转换引擎抽象</td>
+<td>~40 行</td>
+<td>新建 <code>dayu/fins/conversion_engine.py</code>，定义 <code>PdfToConvertedBytes</code> 类型别名 + 配置驱动选择 Docling 或 MinerU</td>
+</tr>
+<tr>
+<td>CnPipeline 改造</td>
+<td>~30 行</td>
+<td><code>cn_pipeline.py</code> 通用化转换函数注入点，默认改为 MinerU</td>
+</tr>
+<tr>
+<td>Cn download filing workflow</td>
+<td>~40 行</td>
+<td><code>cn_download_filing_workflow.py</code> 产出物后缀从 <code>_docling.json</code> 改为 <code>.md</code>，<code>content_type</code> 从 <code>application/json</code> 改为 <code>text/markdown</code></td>
+</tr>
+<tr>
+<td>Cn download source upsert</td>
+<td>~10 行</td>
+<td><code>cn_download_source_upsert.py</code> 放宽 <code>primary_document</code> 硬校验，允许 <code>.md</code> 后缀</td>
+</tr>
+<tr>
+<td>Cn download staging</td>
+<td>~20 行</td>
+<td><code>cn_download_staging.py</code> 字段名从 <code>has_docling_json</code> / <code>docling_json_bytes</code> 泛化</td>
+</tr>
+<tr>
+<td>Cn download rebuild</td>
+<td>~20 行</td>
+<td><code>cn_download_rebuild.py</code> 的 <code>_DOCLING_SUFFIX</code> 常量和引用泛化</td>
+</tr>
+<tr>
+<td>Cn download models</td>
+<td>~5 行</td>
+<td><code>cn_download_models.py</code> 的 stage 名从 <code>&quot;docling_converted&quot;</code> 改为 <code>&quot;converted&quot;</code></td>
+</tr>
+<tr>
+<td>Cn download protocols</td>
+<td>~10 行</td>
+<td><code>cn_download_protocols.py</code> 的 property 名和类型泛化</td>
+</tr>
+<tr>
+<td>Upload Service 泛化</td>
+<td>~30 行</td>
+<td><code>docling_upload_service.py</code> 类名 → <code>ConvertedUploadService</code>，<code>DOCLING_FILE_SUFFIX</code> → <code>CONVERTED_FILE_SUFFIX</code>，内部方法名泛化</td>
+</tr>
+<tr>
+<td>SEC pipeline / upload workflow</td>
+<td>~10 行</td>
+<td>导入和实例化类名同步</td>
+</tr>
+<tr>
+<td>配置项新增</td>
+<td>~5 行</td>
+<td><code>run.json</code> 新增 <code>conversion_engine: &quot;mineru&quot;</code></td>
+</tr>
+<tr>
+<td>测试更新</td>
+<td>~300 行</td>
+<td>受影响测试文件适配新后缀和新函数名</td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td><strong>~770 行</strong></td>
+<td>其中新代码 ~290 行，改动 ~200 行，测试 ~300 行</td>
+</tr>
+</tbody>
+</table>
+<h4 id="134-chat--streamlit-复用可行性">1.3.4 Chat + Streamlit 复用可行性</h4>
+<p>dayu-agent 已有的 Chat + Streamlit 栈完整覆盖&quot;人工修正&quot;场景：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>现有实现</th>
+<th>修正场景复用方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多轮会话</td>
+<td><code>ChatService.submit_turn()</code> → Host 两层记忆模型（Pinned State + 单总池）</td>
+<td>用户在 Chat 中指示修正，LLM 调用写工具执行</td>
+</tr>
+<tr>
+<td>流式展示</td>
+<td><code>chat_tab.py</code> 后台线程 + Queue 桥接 async event stream → Streamlit <code>@st.fragment(run_every=0.5)</code> 轮询</td>
+<td><strong>零改动</strong>，修正过程天然流式展示</td>
+</tr>
+<tr>
+<td>会话恢复</td>
+<td><code>resume_pending_turn()</code> + <code>list_resumable_pending_turns()</code></td>
+<td><strong>零改动</strong></td>
+</tr>
+<tr>
+<td>历史加载</td>
+<td><code>list_conversation_session_turn_excerpts()</code></td>
+<td><strong>零改动</strong></td>
+</tr>
+<tr>
+<td>工具注入</td>
+<td><code>toolset_registrars.json</code> → <code>register_fins_read_toolset()</code></td>
+<td><strong>新增写工具</strong>到同一 registrar</td>
+</tr>
+<tr>
+<td>Scene 管理</td>
+<td><code>prompts/manifests/interactive.json</code> + <code>prompts/scenes/interactive.md</code></td>
+<td><strong>扩展或新增 scene</strong></td>
+</tr>
+<tr>
+<td>财报读取</td>
+<td><code>FinsToolService</code> 9 个只读工具（<code>get_financial_statement</code> / <code>read_section</code> / <code>get_table</code> 等）</td>
+<td><strong>零改动</strong>，LLM 修正时先读后写</td>
+</tr>
+<tr>
+<td>Streamlit 财报列表</td>
+<td><code>filing_tab.py</code> DataFrame 展示已下载财报</td>
+<td><strong>扩展</strong>展示指标和修正历史</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键结论</strong>：人工修正功能不需要新建任何 CLI 命令、不需要新建 Service、不需要新建 UI 框架，只需要：</p>
+<ol>
+<li>在 <code>FinsToolService</code> 新增写方法（注入写仓储）</li>
+<li>在 <code>fins_tools.py</code> 新增写工具注册</li>
+<li>在 <code>prompts/</code> 新增或扩展 scene</li>
+<li>在 <code>streamlit/pages/</code> 扩展展示页面</li>
+</ol>
+<hr>
+<h2 id="2-整体架构">2. 整体架构</h2>
+<h3 id="21-架构总览">2.1 架构总览</h3>
+<p>直接在 dayu-agent 四层架构内扩展，新增 Prefect 调度层作为最上层编排：</p>
+<img src="http://www.plantuml.com/plantuml/svg/bLXlJnj76d-_d-9H-YPH53jj6bsmT5K3ncgb8aNXehv1ifRrs6nPprYpOmYj8ftQ03Ona3H_2sq3QJX8xW915m6nJVakrSvwUUMlS3UpwsLslRxqX8J4iy_pUtxppFDl-DncEcNLigNPqoQkw5GlWq7A5O8HPkDipa90aS5qNBAGeZAf6zCbIgguC48iGk6Zt7NnamG2tsa0mt7zqMkvJtDPyONG0gA1z9EXQvU7XpI07C6i9nkvCdhrSY0RDxz5yF4LxOxY2HE6aftaShdiw5_YJd93rwzzSbMxesaLtPZMImZEtQ2eY0m6tjiVUFCVVF_xRhlcFddBMyrkktvEWf-TvzoapeofV87COeleXNpH8hFdGBTXMCYpWJXdaLduA7irTtNqIf9vXH83sNRC-eOl_P0nkiseRh2OyQWl7MnSGDISGVaoOjGq5DTPAH_pnOFDRMCA5QeMoXTGnI9pqdGya6MbABHJWtlhI-3xt_T5iHS_I4CGYmbiOeR44SmP16a8-OryzQMICGg6CQMpFDCdk-qQVxdSURJJRTSdSD6qJ5mAv6xz5Tz_BAzHq6KKwMNBP5-ZoH1I9JkEw8nfe4J6pj4zx_WupL_UxTnVK5rAw9o9xPvr8bd-SiqxtdNQQzxUBttM8rCwYrkhlBuWDWC_CVbkWy_lAEOnckF8jas28Gqtg-8tVt_0LnzCOATvpsaTG1f6T6mWItn7ThMCf7-9d-JuUac0_ZdFr-qvR4Y32VmtGgoRg6JQZCv16iODX7rFFc2IAn51E7snm9y_vurv7_siHCqAiao18SG9ztBwy7VlSAy_iBXdgTnAp7p9QMzSz8x_vIw_41dpxtNUU1BQ4po3A4E5MnMHhU4TvNAveP5FDO0xcahJH-7jn-x35O6rVY91wmcqRsHpVopyEARJQL4A4xZNS1hk-edJ-Wson11vB5cCcHZHMwEtAuGofJYZ-IMTkal7tlvc3qqvWiY9KLoIWGW1ekI3xaDejrqxNJzm7xtdIpl9vDr67LBb0l3xAvtstxt5rtnfnplSwppQ3ukXTx8GLRc0g5-HAtQqLliS3Zb7h_dgQs-lnG-t-FnXOltTH7f1WWswQxUnw6uiEYUxxflVGXmHgXU_gZXVKvEX06X0hCOPeNe9VO3rEAbI0zr45MARZD2WPyQ4WyZw3LauGkUpLMCwEtn1sWS1HGKL8ip72CImHIPZtgEYWNVIcsFeJoJ323PnaMHDso0pYCwDM2R2BAY-X2-3pll5DBgDqQoT13JWMuI-saiAamoypUNEe-TyQKFSz0TckirAlRauWJlR3phhk-wp3VxsBbm4zsZUVVSqc1-bO4mcZyYYmVAKoE5bi7o94jlEbtLQClzRtu5abatbgSw4JYgLybFEO6EaWAm1e3wlV5clL4nSIXdsJ9IYjtsNrtxo-uHK7VCrrMaiHkYbIvz5fbG6UZCu7KpWK4qTHnbGndAeqR_iPEJ01hcXNEeXH_NLzIQY7lVVjyz4j8Fr9zJktry2TN_XqI9Jl_zuOei0loVqgqO3vhrxuIvjyTfJRtD7wmz1lu7iIbNCp39AeTl8g39q_eBM5up_or2DYp3q9se6piOlTDRVkIjRRdtRssnCOETekTDQbJC-hHnTwu-RW5DoF0EYZcWLQoeveIImD3MCeL1k4Y4jpUVJEzzPWyu08yG2GxV4a8kfAVqtfXVdSJRUDMNI-ryIMazSAJ9NC-2FwzxarGRC_hYX5a6HwHljiHavAftcDbziTkglj6WaX452IzTYWHYa5YtvlWkq4Ih0DyJ4cYAMSGwRJWOeAcf9KoMLYg6XedWdAOy8yBON-Fhl4xZRhlap2lZyljFyf_jaqMaTTDjrJPCFD6gMfXYGOd_Zq01wxozPj9tTpKxpn7sux1p_t6slQG2Nm3lS0MOQquY2Mtz_khZglzJyRtBvE5rSzlOUGnewxOVypRDmxtLNjddjG2fsMe-zaqMPfTrsmoyHx-qFQgbf21VaWpAHjL9uST8-2NVrFbzzqYCT5E6lTtchgHRdHV1N3wd4rvjyTqqyWSeL1kxEfllBoUchVRwq8p-xJpUSPfCVRZcjUtn-gzjkACKya6qaEo6MrZwz6zaSkFSMU6q1_bZuCR00Vttr9S7w1ln-ZRyN4GmJs6cjGBxWewM-iGa6llhCEMgAD1_8APhEWfLSk_Z2Jxr5JD2gLcn4MRveOXqRfcu5UQO1b10B_iWRX8f_IfW4s__JNTy6gW4egyoQNQs82DddBu3Rg0Uhh5nYDP0bA-BWton_SEmSlUcsQnLg4cgokRz-VFcooEup_vyZN13_IFaF" alt="uml diagram"><h3 id="22-分层职责">2.2 分层职责</h3>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>职责</th>
+<th>改动状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prefect 调度层</strong></td>
+<td>跨 ticker 批量编排、重试、缓存、并发控制、定时调度</td>
+<td><strong>新建</strong></td>
+</tr>
+<tr>
+<td><strong>UI 层</strong></td>
+<td>CLI 命令分发（含新增 <code>flow</code> 子命令）；Streamlit Web 交互</td>
+<td>复用 + 扩展</td>
+</tr>
+<tr>
+<td><strong>Service 层</strong></td>
+<td>FinsService 管线调度、ChatService 多轮会话</td>
+<td>完全复用</td>
+</tr>
+<tr>
+<td><strong>Host 层</strong></td>
+<td>Session/Run/并发/事件/Cancel/Resume 九项能力</td>
+<td>完全复用</td>
+</tr>
+<tr>
+<td><strong>Agent 层</strong></td>
+<td>消息交互、工具调用、流式事件</td>
+<td>完全复用</td>
+</tr>
+<tr>
+<td><strong>转换引擎</strong></td>
+<td>PDF → Markdown 转换</td>
+<td><strong>新建 MinerU 模块，替换 Docling</strong></td>
+</tr>
+<tr>
+<td><strong>Pipeline 层</strong></td>
+<td>下载→转换流水线编排</td>
+<td>泛化转换注入点</td>
+</tr>
+<tr>
+<td><strong>Processor 层</strong></td>
+<td>Markdown 处理器</td>
+<td><strong>零改动</strong>（自动按后缀路由）</td>
+</tr>
+<tr>
+<td><strong>Storage 层</strong></td>
+<td>文件系统落盘、元数据管理、DuckDB 指标存储</td>
+<td>复用 + 新增 MetricStore</td>
+</tr>
+<tr>
+<td><strong>Downloader 层</strong></td>
+<td>远端财报发现与 PDF 下载</td>
+<td>完全复用</td>
+</tr>
+<tr>
+<td><strong>Tools 层</strong></td>
+<td>财报读取工具 + 指标修正工具</td>
+<td>复用只读工具 + 新增写工具</td>
+</tr>
+<tr>
+<td><strong>Scene 层</strong></td>
+<td>交互场景 prompt 装配</td>
+<td>复用 interactive scene + 可选新增 scene</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-设计原则">2.3 设计原则</h3>
+<ol>
+<li><strong>直接扩展，不新建项目</strong>：所有改动在 dayu-agent 内部完成</li>
+<li><strong>引擎替换，不改接口</strong>：MinerU 替换 Docling 只改底层实现，上层通过配置驱动选择</li>
+<li><strong>Host 托管一切</strong>：指标提取和人工修正都走 Host 托管，享有 Session/Run/并发/事件/Cancel/Resume</li>
+<li><strong>Agent 驱动 LLM</strong>：通过 Agent + scene + 工具注入实现，不绕过 Host 直调 LLM API</li>
+<li><strong>ProcessorRegistry 自动路由</strong>：产出物后缀变化后，processor 自动切换，不需要改 processor 层代码</li>
+<li><strong>读写工具分离</strong>：只读工具标签 <code>fins</code>，写工具标签 <code>fins_write</code>，通过 scene manifest 控制启用</li>
+<li><strong>Prefect 编排管线操作，Host 托管 Agent 交互</strong>：Prefect 负责 download/process/指标提取等管线操作的编排、重试、并发、调度；Host 负责 LLM Agent 交互的 Session/Run/并发/取消/恢复。两者职责不重叠。</li>
+</ol>
+<hr>
+<h2 id="3-docling--mineru-替换方案">3. Docling → MinerU 替换方案</h2>
+<h3 id="31-当前-docling-调用链">3.1 当前 Docling 调用链</h3>
+<pre class="hljs"><code><div>CnPipeline.__init__()
+  └─ 默认注入 convert_pdf_bytes_to_docling_json_bytes  (fins/docling_export.py:76)
+      └─ convert_pdf_bytes_to_docling_payload()         (fins/docling_export.py:41)
+          └─ convert_pdf_bytes_with_docling()            (docling_runtime.py:634)
+              └─ run_docling_pdf_conversion()            (docling_runtime.py:511)
+                  └─ build_docling_pdf_converter()       (docling_runtime.py:289)
+                      └─ DocumentConverter.convert()     (docling SDK)
+
+产出物: {document_id}_docling.json  →  blob 仓储
+source meta: primary_document 指向 _docling.json
+processor 路由: DoclingProcessor.supports() 匹配 _docling.json 后缀
+</div></code></pre>
+<h3 id="32-替换后的-mineru-调用链">3.2 替换后的 MinerU 调用链</h3>
+<pre class="hljs"><code><div>CnPipeline.__init__()
+  └─ 默认注入 convert_pdf_bytes_to_markdown_bytes  (fins/mineru_export.py)
+      └─ PDF 拆分（大 PDF 按页数阈值切分）
+          └─ MinerU 转换（每个分片 PDF → Markdown）
+              └─ Markdown 合并（拼接分片 Markdown + 页码对齐）
+
+产出物: {document_id}.md  →  blob 仓储
+source meta: primary_document 指向 .md
+processor 路由: MarkdownProcessor.supports() 匹配 .md 后缀（自动切换）
+</div></code></pre>
+<h3 id="33-新建文件">3.3 新建文件</h3>
+<h4 id="331-dayufinsmineru_exportpy250-行">3.3.1 <code>dayu/fins/mineru_export.py</code>（~250 行）</h4>
+<p>MinerU 转换模块，对标 <code>docling_export.py</code> 的职责：</p>
+<pre class="hljs"><code><div>公开 API:
+  - convert_pdf_bytes_to_markdown_bytes(raw_data: bytes, stream_name: str) -&gt; bytes
+    将 PDF 字节流转为 Markdown 字节流，内含 PDF 拆分 → MinerU 转换 → Markdown 合并
+
+  - convert_pdf_bytes_to_markdown_text(raw_data: bytes, stream_name: str) -&gt; str
+    返回 Markdown 字符串（便捷封装）
+
+内部实现:
+  - _split_pdf_by_page_threshold(raw_bytes, max_pages) -&gt; list[bytes]
+    按 页数阈值 拆分大 PDF
+
+  - _convert_single_pdf_with_mineru(pdf_bytes, stream_name) -&gt; str
+    单个 PDF 分片的 MinerU 转换
+
+  - _merge_markdown_fragments(fragments: list[str], page_offsets: list[int]) -&gt; str
+    合并多个 Markdown 分片，保持页码连续性
+</div></code></pre>
+<h4 id="332-dayufinsconversion_enginepy40-行">3.3.2 <code>dayu/fins/conversion_engine.py</code>（~40 行）</h4>
+<p>转换引擎抽象层，配置驱动选择 Docling 或 MinerU：</p>
+<pre class="hljs"><code><div>PdfToConvertedBytes = <span class="hljs-type">Callable</span>[[<span class="hljs-built_in">bytes</span>, <span class="hljs-built_in">str</span>], <span class="hljs-built_in">bytes</span>]
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">ConversionEngineType</span>(<span class="hljs-title class_ inherited__">Enum</span>):
+    DOCLING = <span class="hljs-string">&quot;docling&quot;</span>
+    MINERU = <span class="hljs-string">&quot;mineru&quot;</span>
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">resolve_conversion_function</span>(<span class="hljs-params">engine: ConversionEngineType</span>) -&gt; PdfToConvertedBytes:
+    <span class="hljs-string">&quot;&quot;&quot;根据引擎类型返回对应的转换函数。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<h3 id="34-需要修改的文件">3.4 需要修改的文件</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>改动内容</th>
+<th>改动量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fins/pipelines/cn_pipeline.py</code></td>
+<td>默认转换函数改为 MinerU；property 名泛化</td>
+<td>~30 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_protocols.py</code></td>
+<td><code>convert_pdf_to_docling_json</code> property → <code>convert_pdf_to_converted</code>，类型改为 <code>PdfToConvertedBytes</code></td>
+<td>~10 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_filing_workflow.py</code></td>
+<td>参数名泛化；产出物后缀从 <code>_docling.json</code> 改为 <code>.md</code>；<code>content_type</code> 从 <code>application/json</code> 改为 <code>text/markdown</code></td>
+<td>~40 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_source_upsert.py</code></td>
+<td><strong>关键</strong>：放宽 <code>primary_document.endswith(&quot;_docling.json&quot;)</code> 硬校验为允许 <code>.md</code></td>
+<td>~10 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_staging.py</code></td>
+<td><code>has_docling_json</code> / <code>docling_json_bytes</code> 字段名泛化</td>
+<td>~20 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_rebuild.py</code></td>
+<td><code>_DOCLING_SUFFIX</code> 常量和引用泛化</td>
+<td>~20 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/cn_download_models.py</code></td>
+<td>stage 名 <code>&quot;docling_converted&quot;</code> → <code>&quot;converted&quot;</code></td>
+<td>~5 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/docling_upload_service.py</code></td>
+<td>类名 → <code>ConvertedUploadService</code>；<code>DOCLING_FILE_SUFFIX</code> → <code>CONVERTED_FILE_SUFFIX</code>；内部方法名泛化</td>
+<td>~30 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/sec_pipeline.py</code></td>
+<td>导入和实例化类名同步</td>
+<td>~5 行</td>
+</tr>
+<tr>
+<td><code>fins/pipelines/sec_upload_workflow.py</code></td>
+<td>导入和 property 返回类型同步</td>
+<td>~5 行</td>
+</tr>
+<tr>
+<td><code>config/run.json</code></td>
+<td>新增 <code>conversion_engine: &quot;mineru&quot;</code></td>
+<td>~5 行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="35-不需要修改的文件关键">3.5 不需要修改的文件（关键）</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>engine/processors/processor_registry.py</code></td>
+<td>路由机制不变，按 <code>supports()</code> 自动切换</td>
+</tr>
+<tr>
+<td><code>engine/processors/markdown_processor.py</code></td>
+<td>已完整支持 <code>.md</code> 路由</td>
+</tr>
+<tr>
+<td><code>engine/processors/docling_processor.py</code></td>
+<td>不再被命中，但保留不删（Docling 可作为备选引擎）</td>
+</tr>
+<tr>
+<td><code>fins/processors/fins_markdown_processor.py</code></td>
+<td>已完整支持 <code>.md</code>，<code>relabel_tables</code> 无 Docling 依赖</td>
+</tr>
+<tr>
+<td><code>fins/processors/fins_docling_processor.py</code></td>
+<td>不再被命中，但保留不删</td>
+</tr>
+<tr>
+<td><code>fins/processors/registry.py</code></td>
+<td>注册逻辑不变</td>
+</tr>
+<tr>
+<td><code>fins/tools/service.py</code></td>
+<td>processor 路由逻辑不变</td>
+</tr>
+<tr>
+<td><code>fins/storage/repository_protocols.py</code></td>
+<td>仓储协议不变</td>
+</tr>
+<tr>
+<td><code>docling_runtime.py</code></td>
+<td>保留不删（web_fetch 仍可使用 Docling）</td>
+</tr>
+<tr>
+<td><code>fins/docling_export.py</code></td>
+<td>保留不删（Docling 可作为备选引擎）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="36-风险与注意事项">3.6 风险与注意事项</h3>
+<ol>
+<li>
+<p><strong><code>cn_download_source_upsert.py:238</code> 硬校验</strong>：当前 <code>primary_document.endswith(&quot;_docling.json&quot;)</code> 是最强约束，必须放宽。放宽方式有两种：</p>
+<ul>
+<li><strong>方案 A</strong>：允许 <code>_docling.json</code> 和 <code>.md</code> 两种后缀（兼容两种引擎）</li>
+<li><strong>方案 B</strong>：改为配置驱动，根据 <code>conversion_engine</code> 配置决定允许的后缀</li>
+<li><strong>推荐方案 A</strong>：更简单，且保留 Docling 作为备选引擎的能力</li>
+</ul>
+</li>
+<li>
+<p><strong>已有数据兼容</strong>：如果 workspace 中已有 <code>_docling.json</code> 产出物，切换引擎后：</p>
+<ul>
+<li>已有数据不需要迁移，<code>FinsDoclingProcessor</code> 仍然能处理旧数据</li>
+<li>新下载的财报使用 MinerU，产出 <code>.md</code>，由 <code>FinsMarkdownProcessor</code> 处理</li>
+<li>两种格式的文档可以共存</li>
+</ul>
+</li>
+<li>
+<p><strong>MinerU 依赖</strong>：MinerU 需要额外安装（<code>pip install magic-pdf</code> 等），建议在 <code>pyproject.toml</code> 中作为可选依赖管理</p>
+</li>
+</ol>
+<hr>
+<h2 id="4-指标提取与人工修正方案">4. 指标提取与人工修正方案</h2>
+<h3 id="41-两条路径自动提取-vs-人工校验">4.1 两条路径：自动提取 vs 人工校验</h3>
+<p>指标提取和人工修正是两条独立路径，分别服务于不同场景：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>驱动方</th>
+<th>执行方式</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>自动提取</strong></td>
+<td>Prefect flow（程序驱动）</td>
+<td>直接调 LLM + fins_read_tools + fins_write_tools，<strong>无人工介入</strong></td>
+<td>批量定时提取，如每季度财报披露后自动提取所有持仓股票的指标</td>
+</tr>
+<tr>
+<td><strong>人工校验修正</strong></td>
+<td>用户（Chat 驱动）</td>
+<td>ChatService → Host → Agent + 工具调用</td>
+<td>用户检查自动提取结果，发现错误后通过 Chat 指令修正</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键设计约束</strong>：Prefect 自动提取<strong>不经过 ChatService / Host / interactive scene</strong>，因为：</p>
+<ol>
+<li>ChatService 是人机交互路径，每轮需要用户输入——批量提取场景没有用户输入</li>
+<li>Host 的 pending turn / resume / 两层记忆等人机交互能力在自动提取中无用</li>
+<li>自动提取需要的是：给定 prompt 模板 + 文档 → LLM 调用工具提取指标 → 持久化，这是一个单次 LLM 调用 + 工具循环，不需要多轮会话</li>
+</ol>
+<p>因此，自动提取走<strong>独立的 Agent 执行路径</strong>：构建轻量级 <code>AsyncAgent</code> + <code>ToolRegistry</code>（只含 fins_read_tools + fins_write_tools），用固定的提取 prompt 驱动 LLM，工具循环完成后直接持久化指标。</p>
+<h3 id="42-自动提取路径prefect-驱动">4.2 自动提取路径（Prefect 驱动）</h3>
+<pre class="hljs"><code><div>Prefect batch_extract_metrics_flow
+  └─ extract_single_document_task（per ticker × per document）
+      └─ 构建轻量级 Agent 执行环境：
+          ├─ AsyncAgent（单次 LLM 调用 + 工具循环）
+          ├─ ToolRegistry（fins_read_tools + fins_write_tools）
+          └─ 固定 prompt 模板（提取指令 + 文档上下文）
+      └─ LLM 工具循环（无人工介入）：
+          ├─ LLM 调用 get_financial_statement(ticker, document_id, &quot;balance_sheet&quot;)
+          │   → FinsToolService → FinsMarkdownProcessor → 读取 .md 中的表格
+          ├─ LLM 调用 upsert_financial_metric(ticker, document_id, metric_name, value, ...)
+          │   → FinsToolService → MetricStore → 持久化指标
+          └─ LLM 返回提取结果摘要
+      └─ task 返回 ExtractResult（提取的指标数量、失败项、耗时）
+</div></code></pre>
+<p><strong>与 Chat 路径的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>自动提取（Prefect）</th>
+<th>人工校验修正（Chat）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>驱动方</td>
+<td>程序（固定 prompt 模板）</td>
+<td>用户（自然语言输入）</td>
+</tr>
+<tr>
+<td>执行路径</td>
+<td><code>AsyncAgent</code> 直接执行</td>
+<td><code>ChatService → Host → AsyncAgent</code></td>
+</tr>
+<tr>
+<td>会话管理</td>
+<td>无（单次执行）</td>
+<td>多轮会话（Host 两层记忆）</td>
+</tr>
+<tr>
+<td>Scene</td>
+<td>不需要 scene manifest</td>
+<td><code>interactive</code> scene</td>
+</tr>
+<tr>
+<td>取消/恢复</td>
+<td>Prefect task 取消</td>
+<td>Host pending turn resume</td>
+</tr>
+<tr>
+<td>prompt 来源</td>
+<td><code>prompts/tasks/extract_metrics.md</code>（任务级 prompt）</td>
+<td>用户输入 + scene fragments 装配</td>
+</tr>
+<tr>
+<td>工具集</td>
+<td><code>fins</code> + <code>fins_write</code>（只含提取相关工具）</td>
+<td><code>fins</code> + <code>fins_write</code> + <code>web</code> + <code>ingestion</code>（全量工具）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-人工校验修正路径chat-驱动">4.3 人工校验修正路径（Chat 驱动）</h3>
+<p>用户在 Streamlit Chat 中检查自动提取的结果，发现错误后通过自然语言修正：</p>
+<pre class="hljs"><code><div>场景 1：用户检查自动提取结果
+  用户：&quot;看看贵州茅台2023年年报提取了哪些指标&quot;
+    │
+    ▼
+  ChatService.submit_turn() → Host → Agent
+    │
+    ├─ LLM 调用 fins_read_tools:
+    │   └─ list_extracted_metrics(ticker, document_id)
+    │       → 返回 Prefect 自动提取的指标列表
+    │
+    └─ LLM 返回指标摘要 → Streamlit 流式展示
+
+场景 2：用户发现错误，指示修正
+  用户：&quot;应收账款这个数字不对，应该是 12.5 亿，帮我修正&quot;
+    │
+    ▼
+  ChatService.submit_turn() → Host → Agent（多轮会话，含上下文）
+    │
+    ├─ LLM 调用 fins_write_tools:
+    │   └─ upsert_financial_metric(ticker, document_id, &quot;应收账款&quot;, 1250000000, ...)
+    │       → 记录修正项（原始值、修正值、修正原因=&quot;用户修正&quot;、时间戳）
+    │
+    └─ LLM 返回修正确认 → Streamlit 流式展示
+
+场景 3：用户重新提取某张报表（对自动提取结果不满意）
+  用户：&quot;重新帮我提取利润表，仔细看看营业成本那一行&quot;
+    │
+    ▼
+  ChatService.submit_turn() → Host → Agent
+    │
+    ├─ LLM 调用 fins_read_tools:
+    │   └─ get_financial_statement(ticker, document_id, &quot;income_statement&quot;)
+    ├─ LLM 调用 fins_write_tools:
+    │   └─ upsert_financial_metric(...)  → 覆盖自动提取的值
+    └─ LLM 返回提取结果 → Streamlit 流式展示
+</div></code></pre>
+<h3 id="44-指标存储中的-source-字段区分">4.4 指标存储中的 source 字段区分</h3>
+<p>DuckDB <code>raw_metrics</code> 表的 <code>source</code> 字段区分提取来源：</p>
+<table>
+<thead>
+<tr>
+<th>source 值</th>
+<th>含义</th>
+<th>写入路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;auto_extracted&quot;</code></td>
+<td>Prefect 自动提取</td>
+<td><code>extract_single_document_task</code> → <code>upsert_metric(source=&quot;auto_extracted&quot;)</code></td>
+</tr>
+<tr>
+<td><code>&quot;chat_extracted&quot;</code></td>
+<td>用户通过 Chat 重新提取</td>
+<td>Chat 工具调用 → <code>upsert_metric(source=&quot;chat_extracted&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p>人工修正不改变 <code>raw_metrics</code> 的 <code>source</code> 字段，而是在 <code>corrections</code> 表追加修正记录：</p>
+<table>
+<thead>
+<tr>
+<th>corrections.corrected_by</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;chat&quot;</code></td>
+<td>用户通过 Chat 指示修正</td>
+</tr>
+<tr>
+<td><code>&quot;auto&quot;</code></td>
+<td>自动规则修正（二期预留）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="45-新增写工具">4.5 新增写工具</h3>
+<p>在 <code>dayu/fins/tools/</code> 下扩展写工具，标签为 <code>fins_write</code>：</p>
+<table>
+<thead>
+<tr>
+<th>工具名</th>
+<th>功能</th>
+<th>参数</th>
+<th>自动提取使用</th>
+<th>Chat 使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>upsert_financial_metric</code></td>
+<td>写入或修正一个财务指标</td>
+<td><code>ticker</code>, <code>document_id</code>, <code>metric_name</code>, <code>value</code>, <code>unit</code>, <code>period</code>, <code>statement_type</code>, <code>market</code>(可选), <code>industry</code>(可选), <code>currency</code>(可选), <code>original_value</code>(可选), <code>correction_reason</code>(可选), <code>source</code>(可选)</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>get_metric_corrections</code></td>
+<td>查询某文档的修正历史</td>
+<td><code>ticker</code>, <code>document_id</code></td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>list_extracted_metrics</code></td>
+<td>列出已提取的指标</td>
+<td><code>ticker</code>, <code>document_id</code>, <code>statement_type</code>(可选)</td>
+<td>否</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p><code>upsert_financial_metric</code> 的 <code>source</code> 参数区分提取来源：</p>
+<ul>
+<li>Prefect 自动提取传入 <code>source=&quot;auto_extracted&quot;</code></li>
+<li>Chat 中用户指示提取传入 <code>source=&quot;chat_extracted&quot;</code></li>
+<li>Chat 中用户修正<strong>不传 source</strong>，而是填充 <code>original_value</code> 和 <code>correction_reason</code>，MetricStore 内部自动追加到 <code>corrections</code> 表</li>
+</ul>
+<h3 id="43-finstoolservice-扩展">4.3 FinsToolService 扩展</h3>
+<p>当前 <code>FinsToolService</code> 完全只读。需要扩展写能力：</p>
+<pre class="hljs"><code><div>FinsToolService.__init__ 新增注入:
+  - processed_repository: ProcessedDocumentRepositoryProtocol  （已有，扩展用途）
+  - metric_store: MetricStore  （新建，DuckDB 封装）
+
+新增方法:
+  - upsert_financial_metric(req: MetricUpsertRequest) -&gt; MetricUpsertResult
+  - get_metric_corrections(ticker, document_id) -&gt; list[MetricCorrectionRecord]
+  - list_extracted_metrics(ticker, document_id, statement_type) -&gt; list[MetricRecord]
+</div></code></pre>
+<p><code>FinsToolService</code> 同时服务于自动提取（Prefect）和人工修正（Chat）两条路径，是指标读写的唯一入口。</p>
+<h3 id="47-指标存储选型">4.7 指标存储选型</h3>
+<h4 id="471-设计约束">4.7.1 设计约束</h4>
+<p>指标存储需要同时满足两个方向的需求：</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>需求</th>
+<th>约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>向上</strong>（dayu-agent 内部）</td>
+<td>FinsToolService 读写指标，Chat 中 <code>list_extracted_metrics</code> / <code>upsert_financial_metric</code> 工具调用</td>
+<td>必须与 dayu-agent 的 workspace 仓储协议共存，LLM 工具读写延迟要低</td>
+</tr>
+<tr>
+<td><strong>向下</strong>（衍生加工层）</td>
+<td>DuckDB + dbt 批量读取原始指标，做 ROE、毛利率、增速等衍生计算</td>
+<td>必须能被 DuckDB 高效批量扫描，支持 SQL 查询，不能是散落的 JSON 文件</td>
+</tr>
+</tbody>
+</table>
+<h4 id="472-方案对比">4.7.2 方案对比</h4>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>存储</th>
+<th>写入路径</th>
+<th>DuckDB 读取</th>
+<th>修正追溯</th>
+<th>复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A：散落 JSON（当前 PRD 方案）</td>
+<td>per-document <code>metrics.json</code></td>
+<td>FinsToolService 直接写文件</td>
+<td>DuckDB 逐文件 <code>read_json_auto()</code>，扫描慢</td>
+<td>JSON 内嵌 corrections 数组</td>
+<td>低</td>
+</tr>
+<tr>
+<td>B：集中 SQLite</td>
+<td>单个 <code>workspace/metrics.db</code></td>
+<td>FinsToolService 写 SQLite</td>
+<td>DuckDB <code>ATTACH</code> SQLite，SQL 查询</td>
+<td>SQL 表结构追溯</td>
+<td>中</td>
+</tr>
+<tr>
+<td><strong>C：DuckDB 原生</strong></td>
+<td>单个 <code>workspace/metrics.duckdb</code></td>
+<td>FinsToolService 写 DuckDB</td>
+<td><strong>原生查询，零开销</strong></td>
+<td>SQL 表结构追溯</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<h4 id="473-选型决策方案-c--duckdb-原生">4.7.3 选型决策：方案 C — DuckDB 原生</h4>
+<p>理由：</p>
+<ol>
+<li><strong>衍生加工层零适配</strong>：DuckDB 是 dbt 的原生 adapter（<code>dbt-duckdb</code>），原始指标和衍生指标共用同一个 DuckDB 文件，dbt model 直接 <code>SELECT</code> 原始指标表做衍生计算，不需要跨存储引擎</li>
+<li><strong>写入性能足够</strong>：DuckDB 支持并发读 + 单写（通过 <code>INSERT</code> / <code>UPDATE</code>），FinsToolService 的写操作是逐条 upsert（非批量），DuckDB 的单行写入延迟在毫秒级，完全满足 LLM 工具调用的延迟要求</li>
+<li><strong>修正追溯天然支持</strong>：用 <code>raw_metrics</code>（原始指标）+ <code>corrections</code>（修正记录）两张表，修正不覆盖原始值，而是追加到 <code>corrections</code> 表。读取时 <code>LEFT JOIN</code> 取最新修正值，完整审计链</li>
+<li><strong>与 dayu-agent workspace 一致</strong>：DuckDB 文件放在 <code>workspace/metrics.duckdb</code>，与 workspace 下的其他数据（source / processed / blob）同级，不破坏 workspace 结构</li>
+<li><strong>JSON 方案的瓶颈</strong>：散落 JSON 文件在跨 ticker 批量查询时需要 <code>read_json_auto()</code> 逐文件扫描，几百只股票 × 几十份财报 × 每份上百指标 = 上万文件，扫描性能不可接受</li>
+</ol>
+<h4 id="474-duckdb-表结构">4.7.4 DuckDB 表结构</h4>
+<p>不同市场（A股/港股）、不同行业的财报科目名称存在显著差异。例如：</p>
+<ul>
+<li>A股资产负债表用&quot;应收账款&quot;，港股可能用&quot;贸易及其他应收款&quot;</li>
+<li>银行业有&quot;贷款及垫款&quot;、&quot;客户存款&quot;，制造业没有</li>
+<li>保险业有&quot;保险合同准备金&quot;，其他行业没有</li>
+</ul>
+<p>这一特点影响三个层面：提取层需要知道&quot;提取什么&quot;、存储层需要保留原始科目名、衍生层需要做科目映射后才能跨市场/跨行业计算。</p>
+<p>因此，<code>raw_metrics</code> 表保留<strong>原始科目名</strong>（<code>metric_name</code>），不做标准化映射。映射逻辑放到衍生层的 <code>stg_metrics</code> model 中处理。存储层只负责忠实记录，不负责语义对齐。</p>
+<pre class="hljs"><code><div><span class="hljs-comment">-- 原始指标表：自动提取 + 人工提取的指标值</span>
+<span class="hljs-comment">-- metric_name 保留财报原文科目名，不做标准化映射</span>
+<span class="hljs-keyword">CREATE TABLE</span> raw_metrics (
+    id              <span class="hljs-type">BIGINT</span> <span class="hljs-keyword">PRIMARY KEY</span>,    <span class="hljs-comment">-- DuckDB 自增</span>
+    ticker          <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 股票代码（归一化后）</span>
+    market          <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 市场：CN / HK</span>
+    industry        <span class="hljs-type">VARCHAR</span>,               <span class="hljs-comment">-- 行业分类（如&quot;制造业-食品饮料&quot;、&quot;金融业-银行&quot;）</span>
+    document_id     <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 财报文档 ID</span>
+    metric_name     <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 原始科目名（财报原文，如&quot;应收账款&quot;、&quot;贸易及其他应收款&quot;）</span>
+    <span class="hljs-keyword">value</span>           <span class="hljs-keyword">DOUBLE</span>,                <span class="hljs-comment">-- 指标值</span>
+    unit            <span class="hljs-type">VARCHAR</span>,               <span class="hljs-comment">-- 单位（如&quot;元&quot;、&quot;万元&quot;、&quot;千港元&quot;）</span>
+    currency        <span class="hljs-type">VARCHAR</span>,               <span class="hljs-comment">-- 币种（CNY / HKD / USD）</span>
+    <span class="hljs-keyword">period</span>          <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 报告期（如&quot;2023-12-31&quot;）</span>
+    statement_type  <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 报表类型（balance_sheet / income_statement / cash_flow）</span>
+    source          <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 提取来源：auto_extracted / chat_extracted</span>
+    extracted_at    <span class="hljs-type">TIMESTAMP</span> <span class="hljs-keyword">NOT NULL</span>,    <span class="hljs-comment">-- 提取时间</span>
+    <span class="hljs-comment">-- 唯一约束：同一文档同一科目同一报告期只允许一条</span>
+    <span class="hljs-keyword">UNIQUE</span>(ticker, document_id, metric_name, <span class="hljs-keyword">period</span>)
+);
+
+<span class="hljs-comment">-- 修正记录表：人工修正不覆盖原始值，追加修正记录</span>
+<span class="hljs-keyword">CREATE TABLE</span> corrections (
+    id              <span class="hljs-type">BIGINT</span> <span class="hljs-keyword">PRIMARY KEY</span>,
+    raw_metric_id   <span class="hljs-type">BIGINT</span> <span class="hljs-keyword">NOT NULL</span>,       <span class="hljs-comment">-- 关联 raw_metrics.id</span>
+    original_value  <span class="hljs-keyword">DOUBLE</span> <span class="hljs-keyword">NOT NULL</span>,       <span class="hljs-comment">-- 修正前的值（冗余存储，便于审计）</span>
+    corrected_value <span class="hljs-keyword">DOUBLE</span> <span class="hljs-keyword">NOT NULL</span>,       <span class="hljs-comment">-- 修正后的值</span>
+    reason          <span class="hljs-type">VARCHAR</span>,               <span class="hljs-comment">-- 修正原因</span>
+    corrected_by    <span class="hljs-type">VARCHAR</span> <span class="hljs-keyword">NOT NULL</span>,      <span class="hljs-comment">-- 修正人（chat 用户标识）</span>
+    corrected_at    <span class="hljs-type">TIMESTAMP</span> <span class="hljs-keyword">NOT NULL</span>,    <span class="hljs-comment">-- 修正时间</span>
+    <span class="hljs-keyword">FOREIGN KEY</span> (raw_metric_id) <span class="hljs-keyword">REFERENCES</span> raw_metrics(id)
+);
+</div></code></pre>
+<p><strong>与之前版本的区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>新增字段</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>market</code></td>
+<td>VARCHAR NOT NULL</td>
+<td>市场（CN / HK），衍生层按市场做科目映射</td>
+</tr>
+<tr>
+<td><code>industry</code></td>
+<td>VARCHAR</td>
+<td>行业分类，衍生层按行业筛选适用科目</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>VARCHAR</td>
+<td>币种，衍生层做汇率换算时需要</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么不新增 <code>standardized_metric_name</code> 字段</strong>：</p>
+<p>科目标准化映射是一个持续演进的语义层（新行业、新市场不断补充），不应该固化在存储表中。放在 dbt <code>stg_metrics</code> model 中的好处：</p>
+<ol>
+<li>映射规则变更只需 <code>dbt run</code>，不需要回写 <code>raw_metrics</code></li>
+<li>同一原始科目可以映射到多个标准化指标（如&quot;营业收入&quot;可同时映射到&quot;营收&quot;和&quot;营业总收入&quot;）</li>
+<li>映射规则可版本化（dbt git 管理），可审计</li>
+<li><code>raw_metrics</code> 保持&quot;忠实记录&quot;语义，不承担语义对齐职责</li>
+</ol>
+<h4 id="475-有效值读取逻辑">4.7.5 有效值读取逻辑</h4>
+<p><code>raw_metrics</code> 存原始值，<code>corrections</code> 存修正值。有效值 = 最新修正值或原始值：</p>
+<pre class="hljs"><code><div><span class="hljs-comment">-- 有效指标视图（dayu-agent 侧创建，dbt 衍生层和 FinsToolService 共同消费的单一真源）</span>
+<span class="hljs-comment">-- 保留原始科目名和 market/industry/currency，不做标准化映射</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> effective_metrics <span class="hljs-keyword">AS</span>
+<span class="hljs-keyword">SELECT</span>
+    r.id,
+    r.ticker,
+    r.market,
+    r.industry,
+    r.document_id,
+    r.metric_name,
+    r.value,
+    r.unit,
+    r.currency,
+    r.period,
+    r.statement_type,
+    r.source,
+    r.extracted_at,
+    <span class="hljs-comment">-- 有效值：有修正取最新修正值，否则取原始值</span>
+    <span class="hljs-built_in">COALESCE</span>(
+        (<span class="hljs-keyword">SELECT</span> c.corrected_value
+         <span class="hljs-keyword">FROM</span> corrections c
+         <span class="hljs-keyword">WHERE</span> c.raw_metric_id <span class="hljs-operator">=</span> r.id
+         <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> c.corrected_at <span class="hljs-keyword">DESC</span>
+         LIMIT <span class="hljs-number">1</span>),
+        r.value
+    ) <span class="hljs-keyword">AS</span> effective_value,
+    <span class="hljs-comment">-- 是否被修正过</span>
+    <span class="hljs-keyword">EXISTS</span>(<span class="hljs-keyword">SELECT</span> <span class="hljs-number">1</span> <span class="hljs-keyword">FROM</span> corrections c <span class="hljs-keyword">WHERE</span> c.raw_metric_id <span class="hljs-operator">=</span> r.id) <span class="hljs-keyword">AS</span> is_corrected
+<span class="hljs-keyword">FROM</span> raw_metrics r;
+</div></code></pre>
+<h4 id="476-metricstore-实现">4.7.6 MetricStore 实现</h4>
+<p>新建 <code>dayu/fins/metric_store.py</code>（~200 行），封装 DuckDB 操作，提供类型安全的 API：</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">class</span> <span class="hljs-title class_">MetricStore</span>:
+    <span class="hljs-string">&quot;&quot;&quot;指标存储，封装 DuckDB 读写操作。&quot;&quot;&quot;</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, db_path: Path</span>):
+        <span class="hljs-string">&quot;&quot;&quot;初始化 DuckDB 连接，建表（如不存在）。&quot;&quot;&quot;</span>
+        ...
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">upsert_metric</span>(<span class="hljs-params">self, req: MetricUpsertRequest</span>) -&gt; MetricUpsertResult:
+        <span class="hljs-string">&quot;&quot;&quot;写入或修正指标。
+
+        - source 为 auto_extracted / chat_extracted 时：INSERT OR REPLACE 到 raw_metrics
+        - source 为 chat_corrected 时：保持 raw_metrics 不变，追加到 corrections 表
+        &quot;&quot;&quot;</span>
+        ...
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">list_metrics</span>(<span class="hljs-params">
+        self, ticker: <span class="hljs-built_in">str</span>, document_id: <span class="hljs-built_in">str</span>, *, statement_type: <span class="hljs-built_in">str</span> | <span class="hljs-literal">None</span> = <span class="hljs-literal">None</span>
+    </span>) -&gt; <span class="hljs-built_in">list</span>[MetricRecord]:
+        <span class="hljs-string">&quot;&quot;&quot;查询有效指标（走 effective_metrics 视图）。&quot;&quot;&quot;</span>
+        ...
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_corrections</span>(<span class="hljs-params">self, ticker: <span class="hljs-built_in">str</span>, document_id: <span class="hljs-built_in">str</span></span>) -&gt; <span class="hljs-built_in">list</span>[CorrectionRecord]:
+        <span class="hljs-string">&quot;&quot;&quot;查询修正历史。&quot;&quot;&quot;</span>
+        ...
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_raw_metrics_for_duckdb</span>(<span class="hljs-params">self</span>) -&gt; Path:
+        <span class="hljs-string">&quot;&quot;&quot;返回 DuckDB 文件路径，供 dbt / 分析层直接使用。&quot;&quot;&quot;</span>
+        ...
+</div></code></pre>
+<h4 id="477-存储位置">4.7.7 存储位置</h4>
+<pre class="hljs"><code><div>workspace/
+├── companies/{company_id}/
+│   └── {document_id}/
+│       ├── source/                    ← 源数据（dayu-agent 仓储协议管理）
+│       │   ├── source meta.json
+│       │   ├── {document_id}.pdf
+│       │   └── {document_id}.md       ← MinerU 产出物
+│       └── processed/                 ← 加工产物（dayu-agent 仓储协议管理）
+│           └── processed meta.json
+├── metrics.duckdb                     ← 新增：指标存储（DuckDB 单文件）
+└── .dayu/                             ← dayu-agent 状态目录（Host SQLite 等）
+</div></code></pre>
+<p>DuckDB 文件放在 workspace 根目录，不在 per-company / per-document 目录下——因为指标是跨文档、跨公司的结构化数据，集中存储便于批量查询和衍生计算。</p>
+<h3 id="48-scene-扩展">4.8 Scene 扩展</h3>
+<p><strong>方案选择</strong>：扩展现有 <code>interactive</code> scene，不新增 scene。</p>
+<p>理由：</p>
+<ul>
+<li><code>interactive</code> scene 已配置 <code>tool_tags_any: [&quot;web&quot;, &quot;fins&quot;, &quot;ingestion&quot;]</code></li>
+<li>只需追加 <code>&quot;fins_write&quot;</code> 标签即可启用写工具</li>
+<li>不破坏现有交互体验</li>
+</ul>
+<p>改动：</p>
+<ol>
+<li><code>prompts/manifests/interactive.json</code>：<code>tool_selection.tool_tags_any</code> 追加 <code>&quot;fins_write&quot;</code></li>
+<li><code>prompts/base/tools.md</code>：在 <code>&lt;when_tag fins&gt;</code> 段落补充写工具使用指引</li>
+<li><code>fins/toolset_registrars.py</code>：<code>register_fins_read_toolset</code> 扩展为同时注册读写工具，或新增 <code>register_fins_write_toolset</code></li>
+</ol>
+<h3 id="49-streamlit-页面扩展">4.9 Streamlit 页面扩展</h3>
+<p>在 <code>filing_tab.py</code> 中扩展指标展示区：</p>
+<table>
+<thead>
+<tr>
+<th>展示区</th>
+<th>数据来源</th>
+<th>交互</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已提取指标表</td>
+<td><code>list_extracted_metrics()</code></td>
+<td>DataFrame 展示，支持按报表类型筛选，标注 <code>source</code>（自动/人工）</td>
+</tr>
+<tr>
+<td>修正历史</td>
+<td><code>get_metric_corrections()</code></td>
+<td>展示原始值、修正值、修正原因、修正人、时间戳</td>
+</tr>
+<tr>
+<td>自动提取状态</td>
+<td>Prefect flow run 状态</td>
+<td>展示最近一次自动提取 flow 的执行状态、提取指标数量、失败项</td>
+</tr>
+<tr>
+<td>修正入口</td>
+<td>Chat Tab 跳转链接</td>
+<td>引导用户到 Chat Tab 进行自然语言校验和修正</td>
+</tr>
+</tbody>
+</table>
+<p>chat_tab <strong>零改动</strong>——修正过程天然通过现有 Chat 流式展示。</p>
+<hr>
+<h2 id="5-prefect-调度层集成方案">5. Prefect 调度层集成方案</h2>
+<h3 id="51-动机与定位">5.1 动机与定位</h3>
+<p>dayu-agent 当前没有任何内置的批处理、定时调度或工作流编排框架。所有 CLI 命令都是一次性执行，跨 ticker 批量操作只能靠外部脚本（如 <code>utils/llm_ci_process.py</code> 通过 subprocess 逐个调用 <code>dayu-cli process</code>）。</p>
+<p>集成 Prefect 的目标：</p>
+<ol>
+<li><strong>跨 ticker 批量调度</strong>：一次下载/处理多只股票的财报，而非逐个手动执行</li>
+<li><strong>自动重试</strong>：网络波动导致的 PDF 下载失败、MinerU 转换失败可自动重试</li>
+<li><strong>并发控制</strong>：多 ticker 并发下载，同时控制对巨潮/披露易的请求速率</li>
+<li><strong>定时调度</strong>：定期（如每季度财报披露季）自动下载新增财报</li>
+<li><strong>状态追踪</strong>：通过 Prefect UI 可视化查看每个 flow/task 的执行状态、日志、历史</li>
+<li><strong>缓存</strong>：已成功完成的 task 结果可缓存，避免重复执行</li>
+</ol>
+<h3 id="52-架构边界prefect-管什么不管什么">5.2 架构边界：Prefect 管什么，不管什么</h3>
+<p>dayu-agent 的执行路径分为两类，Prefect 只包装第一类：</p>
+<table>
+<thead>
+<tr>
+<th>路径类型</th>
+<th>执行方式</th>
+<th>Prefect 包装</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>管线操作</strong>（direct operation）</td>
+<td><code>FinsRuntime.execute()</code> → <code>CnPipeline.download()</code> / <code>process()</code> 等</td>
+<td><strong>是</strong></td>
+<td>纯 IO/计算操作，无 LLM 交互，无 Host 状态机</td>
+</tr>
+<tr>
+<td><strong>自动指标提取</strong>（agent execute）</td>
+<td><code>AsyncAgent</code> + <code>ToolRegistry</code> 直接执行，不经过 Host/ChatService</td>
+<td><strong>是</strong></td>
+<td>程序驱动，无人工介入，不需要多轮会话/pending turn/resume</td>
+</tr>
+<tr>
+<td><strong>人机交互</strong>（agent stream）</td>
+<td><code>Host.run_agent_stream()</code> → <code>AsyncAgent</code> → LLM + 工具调用</td>
+<td><strong>否</strong></td>
+<td>Host 强约束管理 Session/Run/Cancel/Resume/Pending Turn，人机交互不可替代</td>
+</tr>
+</tbody>
+</table>
+<p><strong>管线操作</strong>包括：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>CLI 命令</th>
+<th>FinsRuntime 入口</th>
+<th>适合 Prefect task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>下载财报</td>
+<td><code>download</code></td>
+<td><code>pipeline.download()</code> / <code>pipeline.download_stream()</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>上传财报</td>
+<td><code>upload_filing</code> / <code>upload_material</code></td>
+<td><code>pipeline.upload_filing()</code> / <code>pipeline.upload_material()</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>预处理</td>
+<td><code>process</code> / <code>process_filing</code> / <code>process_material</code></td>
+<td><code>pipeline.process()</code> / <code>pipeline.process_filing()</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>批量上传脚本生成</td>
+<td><code>upload_filings_from</code></td>
+<td><code>generate_upload_filings_script()</code></td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p><strong>自动指标提取</strong>包括（Prefect 包装，但不经过 Host）：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>执行路径</th>
+<th>适合 Prefect task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>批量指标提取</td>
+<td><code>AsyncAgent</code> + <code>fins_read_tools</code> + <code>fins_write_tools</code> + 固定 prompt 模板</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p><strong>人机交互</strong>包括（不包装）：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>CLI 命令</th>
+<th>执行路径</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多轮对话</td>
+<td><code>interactive</code></td>
+<td><code>ChatService</code> → <code>Host.run_agent_stream()</code> → <code>AsyncAgent</code></td>
+<td>Host 管理 pending turn / resume / 两层记忆</td>
+</tr>
+<tr>
+<td>单轮 prompt</td>
+<td><code>prompt</code></td>
+<td><code>PromptService</code> → <code>Host.run_agent_stream()</code></td>
+<td>同上</td>
+</tr>
+<tr>
+<td>写作</td>
+<td><code>write</code></td>
+<td><code>WriteService</code> → <code>Host.run_agent_stream()</code></td>
+<td>多轮 LLM 交互（写作→审计→确认→修复）</td>
+</tr>
+<tr>
+<td>人工指标校验</td>
+<td>Chat 中指示</td>
+<td><code>ChatService</code> → <code>Host.run_agent_stream()</code> → 工具调用</td>
+<td>人机交互，用户检查自动提取结果并修正</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-集成架构">5.3 集成架构</h3>
+<img src="http://www.plantuml.com/plantuml/svg/bLRVRnf747xVlsBalDYA7DAwLXCUgjZyK5yY8PEy8Q7riU0LnoxQNUguLIJNjOsJu3XAsbHodDXMIaGjsOcbgb2WvN-fk0C_yIzKjtVWEqnaLJm0C_FDV3iptzxTameBLIgOIEOfAsA12s3mGf4pmbHIhPa4134KPZcJ-4AMiP7F2LvYcGWtkO0RyGNdCoa9_8005iVZOtVYNyMZZeUB316UzSkxTsultaK0SSxKq1QPYytVzcn9-Zs1B-RGOuIAsCZZ786fX21POYZeV_h9QdwmpZUcTCbB0bFBM1ahwGnVPIR7cNJMvAjJW2KiElQePuwRV1LkHEVZyx6vIV2Yu0QHSWoTSAtNWSaZ9R2Xni0nrne01z4ZpWhBV8eLYG15ZJmHEicG-WCiyvEh3qbFX7lSFuyUihv4PxYXeHxp0DG_amnUAytYd9EbTtRSQtRiLxlTlmy6xPrUwvT-fmpVSga6xITNHXMdJ2wLcA85ac8Hbg15Ob96RWqRCJqJC7ldSwptAIFY8SGU5RbG41erXmYfAVioZzRlCvJxvHFhQStUUs7jlRwUye9SOyQ21jw41voRIoH7fH9hAPQbJAO5SUR7kIdX9cZBgg2AkAOKImXUAAem39jT84fGGzugPFoTTlDVoiPN_xu691KN9CMY9ICVNGIxycFthoshyjgVmnSuiGFTPjEgL-sZuukJIhTpPf--xzS_Mlzi3jexaHMiuEBtS-jfRT2kT1kxlTOUUCARr9FUppLxfsuTr22f1C45aohGERgDqnIp3wkzWsTsfMmVbI44RYtth-RhH3wKnBbMul5exEjWRiUR9E8xQX3uT_kbdel-SJc85DD6P_LUR4EII4av2osLM2Y2cK7Cq1AHfG89THk_MUSR_RDFLcTxL3c1rSgeycE4hjuIixFV1BI7hbm5JeHFNkYAt9q0duWG2cZPyVhtDHnGKOhvDXBvLVn_S7u9-zYuYnOEQ200J37xroDtLRgjPzPM5GMGlbJ-VGj3gIY9KEaiPPWP59lUea_F83IQjmCUZI0CihHSe2gjIe9Dpw2HuveI40AJIkVBuC9vU57E94ACAmA2vbOKy6oWzn0uB3YttQ2zZm1ceVVc3_jvrNwtQRMQ412wLQzQMtKTPBrfMcVxKDH21hjsRB_jk5hHRbSjm_Q5VEkhtUFT92m33jTnniFZ8m0lFY1HZw_MdVr-tJwi-W_LQxsotntea8lr_Nwdt2-Vz3R_x7yyxTVM_VhJ8LeyLhlPQtwmtnwwAjAEuQEsszYrzZQwZUS-jlS8opZl4Vy1" alt="uml diagram"><p><strong>关键决策：Prefect task 绕过 Host，直接调用 FinsRuntime / AsyncAgent</strong></p>
+<p>理由：</p>
+<ol>
+<li>管线操作（download/process/upload）是纯 IO/计算操作，不涉及 LLM 交互、不需要 pending turn 恢复</li>
+<li>自动指标提取是程序驱动的单次 LLM + 工具循环，不需要多轮会话、不需要 pending turn / resume / 两层记忆——这些是 Host 为人机交互提供的能力</li>
+<li>Host 的 <code>run_operation_sync</code> / <code>run_operation_stream</code> 为管线操作提供的只是 run registry + concurrency permit + cancellation bridge，这些能力 Prefect 已经以更完善的方式提供</li>
+<li>绕过 Host 避免了 Prefect task 跨进程与 Host SQLite 状态不一致的问题</li>
+<li><code>FinsRuntime.execute()</code> 是 <code>FinsService.submit()</code> 的内层，不需要 session 解析、scene preparation 等上层逻辑</li>
+</ol>
+<p><strong>取消检查</strong>：<code>FinsRuntime.execute()</code> 接受 <code>cancel_checker</code> 参数，Prefect task 内部可构造一个检查 Prefect task 状态的 cancel_checker 传入。</p>
+<h3 id="54-新建文件">5.4 新建文件</h3>
+<h4 id="541-dayuflows__init__py">5.4.1 <code>dayu/flows/__init__.py</code></h4>
+<p>Prefect 调度层包入口。</p>
+<h4 id="542-dayuflowsruntimepy80-行">5.4.2 <code>dayu/flows/runtime.py</code>（~80 行）</h4>
+<p>Prefect task 共享的 FinsRuntime 构建器：</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@dataclass</span>
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">FlowRuntimeContext</span>:
+    <span class="hljs-string">&quot;&quot;&quot;Prefect task 内共享的 dayu-agent 运行时上下文。&quot;&quot;&quot;</span>
+    fins_runtime: FinsRuntimeProtocol
+    workspace_root: Path
+    config_dir: Path
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">build_flow_runtime</span>(<span class="hljs-params">workspace_root: Path, config_dir: Path</span>) -&gt; FlowRuntimeContext:
+    <span class="hljs-string">&quot;&quot;&quot;构建 Prefect task 共享的 FinsRuntime（轻量级，无 Host 依赖）。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<h4 id="543-dayuflowsdownload_flowpy150-行">5.4.3 <code>dayu/flows/download_flow.py</code>（~150 行）</h4>
+<p>下载 flow + task 定义：</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@flow(<span class="hljs-params">name=<span class="hljs-string">&quot;batch_download_filing_flow&quot;</span>, retries=<span class="hljs-number">1</span>, retry_delay_seconds=<span class="hljs-number">60</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_download_flow</span>(<span class="hljs-params">
+    tickers: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>],
+    *,
+    forms: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>] | <span class="hljs-literal">None</span> = <span class="hljs-literal">None</span>,
+    start: <span class="hljs-built_in">str</span> | <span class="hljs-literal">None</span> = <span class="hljs-literal">None</span>,
+    end: <span class="hljs-built_in">str</span> | <span class="hljs-literal">None</span> = <span class="hljs-literal">None</span>,
+    overwrite: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>,
+    workspace_root: Path = ...,
+</span>) -&gt; <span class="hljs-built_in">dict</span>[<span class="hljs-built_in">str</span>, DownloadResult]:
+    <span class="hljs-string">&quot;&quot;&quot;批量下载多只股票的财报。&quot;&quot;&quot;</span>
+    ...
+
+<span class="hljs-meta">@task(<span class="hljs-params">retries=<span class="hljs-number">3</span>, retry_delay_seconds=[<span class="hljs-number">60</span>, <span class="hljs-number">120</span>, <span class="hljs-number">300</span>], cache_key_fn=...</span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">download_single_ticker_task</span>(<span class="hljs-params">
+    ticker: <span class="hljs-built_in">str</span>,
+    ctx: FlowRuntimeContext,
+    *,
+    forms: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>] | <span class="hljs-literal">None</span>,
+    start: <span class="hljs-built_in">str</span> | <span class="hljs-literal">None</span>,
+    end: <span class="hljs-built_in">str</span> | <span class="hljs-literal">None</span>,
+    overwrite: <span class="hljs-built_in">bool</span>,
+</span>) -&gt; DownloadResult:
+    <span class="hljs-string">&quot;&quot;&quot;下载单只股票财报的 Prefect task。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<h4 id="544-dayuflowsprocess_flowpy120-行">5.4.4 <code>dayu/flows/process_flow.py</code>（~120 行）</h4>
+<p>预处理 flow + task 定义：</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@flow(<span class="hljs-params">name=<span class="hljs-string">&quot;batch_process_flow&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_process_flow</span>(<span class="hljs-params">
+    tickers: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>],
+    *,
+    overwrite: <span class="hljs-built_in">bool</span> = <span class="hljs-literal">False</span>,
+    workspace_root: Path = ...,
+</span>) -&gt; <span class="hljs-built_in">dict</span>[<span class="hljs-built_in">str</span>, ProcessResult]:
+    <span class="hljs-string">&quot;&quot;&quot;批量预处理多只股票的已下载财报。&quot;&quot;&quot;</span>
+    ...
+
+<span class="hljs-meta">@task(<span class="hljs-params">retries=<span class="hljs-number">2</span>, retry_delay_seconds=<span class="hljs-number">30</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">process_single_ticker_task</span>(<span class="hljs-params">
+    ticker: <span class="hljs-built_in">str</span>,
+    ctx: FlowRuntimeContext,
+    *,
+    overwrite: <span class="hljs-built_in">bool</span>,
+</span>) -&gt; ProcessResult:
+    <span class="hljs-string">&quot;&quot;&quot;预处理单只股票财报的 Prefect task。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<h4 id="545-dayuflowsextract_flowpy200-行">5.4.5 <code>dayu/flows/extract_flow.py</code>（~200 行）</h4>
+<p>指标提取 flow + task 定义（<strong>不经过 Host/ChatService，直接驱动 AsyncAgent</strong>）：</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@flow(<span class="hljs-params">name=<span class="hljs-string">&quot;batch_extract_metrics_flow&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">batch_extract_metrics_flow</span>(<span class="hljs-params">
+    targets: <span class="hljs-built_in">list</span>[MetricExtractionTarget],
+    *,
+    workspace_root: Path = ...,
+</span>) -&gt; <span class="hljs-built_in">dict</span>[<span class="hljs-built_in">str</span>, ExtractResult]:
+    <span class="hljs-string">&quot;&quot;&quot;批量提取多只股票的财报指标（无人工介入）。&quot;&quot;&quot;</span>
+    ...
+
+<span class="hljs-meta">@task(<span class="hljs-params">retries=<span class="hljs-number">2</span>, retry_delay_seconds=<span class="hljs-number">60</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_single_document_task</span>(<span class="hljs-params">
+    target: MetricExtractionTarget,
+    ctx: FlowRuntimeContext,
+</span>) -&gt; ExtractResult:
+    <span class="hljs-string">&quot;&quot;&quot;提取单文档指标的 Prefect task。
+
+    直接构建 AsyncAgent + ToolRegistry，用固定 prompt 模板驱动 LLM，
+    工具循环完成后直接持久化指标。不经过 Host/ChatService。
+    &quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<p><strong>自动提取的 Agent 构建方式</strong>：</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># extract_single_document_task 内部逻辑（伪代码）</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">extract_single_document_task</span>(<span class="hljs-params">target, ctx</span>):
+    <span class="hljs-comment"># 1. 构建 FinsToolService（只含 fins_read + fins_write 工具）</span>
+    tool_service = build_fins_tool_service(ctx, ticker=target.ticker)
+    tool_registry = build_extract_tool_registry(tool_service)
+
+    <span class="hljs-comment"># 2. 加载提取 prompt 模板</span>
+    prompt = load_task_prompt(<span class="hljs-string">&quot;extract_metrics&quot;</span>, {
+        <span class="hljs-string">&quot;ticker&quot;</span>: target.ticker,
+        <span class="hljs-string">&quot;document_id&quot;</span>: target.document_id,
+        <span class="hljs-string">&quot;statement_type&quot;</span>: target.statement_type,
+    })
+
+    <span class="hljs-comment"># 3. 构建 AsyncAgent（单次 LLM 调用 + 工具循环，无多轮会话）</span>
+    agent = AsyncAgent(
+        runner=build_runner(model_config),
+        tool_registry=tool_registry,
+        max_iterations=<span class="hljs-number">16</span>,
+    )
+
+    <span class="hljs-comment"># 4. 执行并等待完成</span>
+    result = asyncio.run(agent.execute(prompt))
+
+    <span class="hljs-comment"># 5. 从 MetricStore 读取提取结果</span>
+    metrics = tool_service.list_extracted_metrics(target.ticker, target.document_id)
+    <span class="hljs-keyword">return</span> ExtractResult(ticker=target.ticker, document_id=target.document_id, metrics=metrics)
+</div></code></pre>
+<p><strong>prompt 模板</strong>：<code>dayu/config/prompts/tasks/extract_metrics.md</code></p>
+<p>prompt 模板需要根据市场（CN / HK）和报表类型（balance_sheet / income_statement / cash_flow）选择对应的提取指引。不同市场的财报科目差异大，LLM 需要知道当前文档的市场上下文，才能正确识别和提取科目。</p>
+<pre class="hljs"><code><div><span class="hljs-section"># 指标提取任务</span>
+
+你是一个财报指标提取助手。请从以下文档中提取 {statement<span class="hljs-emphasis">_type} 数据。
+
+## 文档上下文
+- 股票代码：{ticker}
+- 市场：{market}
+- 行业：{industry}
+- 文档 ID：{document_</span>id}
+<span class="hljs-bullet">-</span> 币种：{currency}
+
+<span class="hljs-section">## 提取步骤</span>
+
+<span class="hljs-bullet">1.</span> 调用 <span class="hljs-code">`get_financial_statement`</span> 读取 {ticker} 的 {document<span class="hljs-emphasis">_id} 的 {statement_</span>type} 报表
+<span class="hljs-bullet">2.</span> 逐行解析报表中的每个科目，保留<span class="hljs-strong">**财报原文科目名**</span>，不做翻译或标准化
+<span class="hljs-bullet">3.</span> 对每个科目调用 <span class="hljs-code">`upsert_financial_metric`</span> 写入存储：
+<span class="hljs-bullet">   -</span> <span class="hljs-code">`source`</span> 参数传 <span class="hljs-code">`&quot;auto_extracted&quot;`</span>
+<span class="hljs-bullet">   -</span> <span class="hljs-code">`market`</span> 参数传 <span class="hljs-code">`&quot;{market}&quot;`</span>
+<span class="hljs-bullet">   -</span> <span class="hljs-code">`industry`</span> 参数传 <span class="hljs-code">`&quot;{industry}&quot;`</span>
+<span class="hljs-bullet">   -</span> <span class="hljs-code">`currency`</span> 参数传 <span class="hljs-code">`&quot;{currency}&quot;`</span>
+<span class="hljs-bullet">4.</span> 返回提取的科目数量和摘要
+
+<span class="hljs-section">## 注意事项</span>
+
+<span class="hljs-bullet">-</span> 金额单位保持财报原文标注（如&quot;元&quot;、&quot;万元&quot;、&quot;千元&quot;）
+<span class="hljs-bullet">-</span> 科目名保留原文，不翻译、不缩写、不标准化
+<span class="hljs-bullet">-</span> 如果某个科目值无法确定，跳过并记录
+<span class="hljs-bullet">-</span> 不要猜测或编造数据
+</div></code></pre>
+<h4 id="546-dayuflowsschedulepy60-行">5.4.6 <code>dayu/flows/schedule.py</code>（~60 行）</h4>
+<p>定时调度配置：</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">def</span> <span class="hljs-title function_">deploy_quarterly_download_schedule</span>(<span class="hljs-params">
+    tickers: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>],
+    *,
+    workspace_root: Path,
+    cron: <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;0 9 * * 4&quot;</span>,  <span class="hljs-comment"># 每周四 9:00 检查新财报</span>
+</span>) -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;部署定时下载调度到 Prefect。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<h4 id="547-dayuflowsclipy100-行">5.4.7 <code>dayu/flows/cli.py</code>（~100 行）</h4>
+<p>Prefect flow 的 CLI 入口（注册为 dayu-cli 子命令 <code>flow</code>）：</p>
+<pre class="hljs"><code><div>dayu-cli flow batch-download --tickers 600519,09988 --start 2024-01-01
+dayu-cli flow batch-process --tickers 600519,09988
+dayu-cli flow batch-extract --tickers 600519,09988 --statement balance_sheet
+dayu-cli flow schedule-download --tickers 600519,09988 --cron &quot;0 9 * * 4&quot;
+</div></code></pre>
+<h3 id="55-关键设计决策">5.5 关键设计决策</h3>
+<h4 id="551-并发控制prefect-vs-dayu-agent-lane">5.5.1 并发控制：Prefect vs dayu-agent lane</h4>
+<p>dayu-agent 有内置的并发 lane 机制（<code>cn_download</code> / <code>hk_download</code> 默认并发 1），但 Prefect task 绕过 Host 后这些 lane 不生效。需要由 Prefect 的 task 并发控制替代：</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>dayu-agent lane</th>
+<th>Prefect 替代方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>巨潮 PDF 下载</td>
+<td><code>cn_download: 1</code></td>
+<td><code>download_single_ticker_task.with_options(concurrency=1)</code> 或 Prefect work pool 的 concurrency limit</td>
+</tr>
+<tr>
+<td>港股 PDF 下载</td>
+<td><code>hk_download: 1</code></td>
+<td>同上，区分 A/H 股的 ticker 分别限流</td>
+</tr>
+<tr>
+<td>MinerU 转换</td>
+<td>无限制（CPU/GPU 瓶颈自然限流）</td>
+<td><code>process_single_ticker_task</code> 的 concurrency 按 CPU/GPU 资源设置</td>
+</tr>
+<tr>
+<td>LLM API</td>
+<td><code>llm_api: 8</code>（Host 自治 lane）</td>
+<td>自动提取 task 绕过 Host，使用 Prefect task concurrency 控制 LLM 并发数；人工修正走 Chat 时 Host lane 自然生效</td>
+</tr>
+</tbody>
+</table>
+<h4 id="552-asyncio-兼容性">5.5.2 asyncio 兼容性</h4>
+<p><code>FinsRuntime.execute()</code> 的流式命令返回 <code>AsyncIterator[FinsEvent]</code>，同步命令返回 <code>FinsResult</code>。在 Prefect task 中：</p>
+<ul>
+<li><strong>同步命令</strong>（<code>process_filing</code> / <code>process_material</code> / <code>upload_filings_from</code>）：直接调用，无需特殊处理</li>
+<li><strong>流式命令</strong>（<code>download</code> / <code>process</code> / <code>upload_filing</code> / <code>upload_material</code>）：在 task 内部用 <code>asyncio.run()</code> 消费 <code>AsyncIterator</code>，收集结果后返回。这与 CLI 层的 <code>asyncio.run(_consume_fins_stream(...))</code> 模式一致</li>
+</ul>
+<h4 id="553-workspace-隔离与文件锁">5.5.3 workspace 隔离与文件锁</h4>
+<p>dayu-agent 有 <code>StateDirSingleInstanceLock</code>（进程级单例锁）和 workspace 级别的文件锁。多 Prefect task 并发操作同一 workspace 时：</p>
+<ul>
+<li><strong>同一 ticker 的 task 不并发</strong>：Prefect task 按 ticker 维度天然串行（同一 ticker 的 download → process → extract 有依赖关系）</li>
+<li><strong>不同 ticker 的 task 可并发</strong>：不同 ticker 的文件路径不交叉，无锁冲突</li>
+<li><strong>workspace 初始化只需一次</strong>：<code>build_flow_runtime()</code> 在 flow 入口调用一次，task 共享 <code>FlowRuntimeContext</code></li>
+</ul>
+<h4 id="554-缓存策略">5.5.4 缓存策略</h4>
+<p>Prefect task 缓存用于避免重复执行已完成的操作：</p>
+<table>
+<thead>
+<tr>
+<th>task</th>
+<th>缓存 key</th>
+<th>缓存有效期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>download_single_ticker_task</code></td>
+<td><code>f&quot;{ticker}:{forms}:{start}:{end}:{overwrite}&quot;</code></td>
+<td>24 小时（财报披露季每日新增）</td>
+</tr>
+<tr>
+<td><code>process_single_ticker_task</code></td>
+<td><code>f&quot;{ticker}:{overwrite}&quot;</code></td>
+<td>永久（processed 产物不变则不需重跑）</td>
+</tr>
+<tr>
+<td><code>extract_single_document_task</code></td>
+<td><code>f&quot;{ticker}:{document_id}:{statement_type}&quot;</code></td>
+<td>永久（指标提取一次即可，修正走 Chat）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="555-自动提取-task-的-agent-执行模型">5.5.5 自动提取 task 的 Agent 执行模型</h4>
+<p>自动提取 task <strong>不经过 Host / ChatService</strong>，直接构建 <code>AsyncAgent</code> 执行：</p>
+<pre class="hljs"><code><div>extract_single_document_task
+  └─ 构建 FinsToolService（fins_read + fins_write 工具）
+  └─ 构建 AsyncAgent（单次 LLM 调用 + 工具循环）
+      └─ 加载 extract_metrics.md prompt 模板
+      └─ AsyncAgent.execute(prompt)
+          ├─ LLM 调用 get_financial_statement() → 读取 .md 中的报表
+          ├─ LLM 调用 upsert_financial_metric() → 持久化指标（source=&quot;auto_extracted&quot;）
+          └─ LLM 返回提取摘要
+  └─ 从 MetricStore 读取提取结果，返回 ExtractResult
+</div></code></pre>
+<p><strong>与 Chat 路径的本质区别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>自动提取（Prefect task）</th>
+<th>人工校验修正（Chat）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>驱动方</td>
+<td>程序（固定 prompt 模板）</td>
+<td>用户（自然语言输入）</td>
+</tr>
+<tr>
+<td>Agent 构建</td>
+<td><code>AsyncAgent</code> 直接构建</td>
+<td><code>ChatService → Host → AsyncAgent</code></td>
+</tr>
+<tr>
+<td>会话</td>
+<td>无（单次执行）</td>
+<td>多轮会话（Host 两层记忆）</td>
+</tr>
+<tr>
+<td>Scene</td>
+<td>不需要</td>
+<td><code>interactive</code> scene</td>
+</tr>
+<tr>
+<td>取消/恢复</td>
+<td>Prefect task 取消</td>
+<td>Host pending turn resume</td>
+</tr>
+<tr>
+<td>人工介入</td>
+<td><strong>无</strong></td>
+<td>有（用户逐轮输入）</td>
+</tr>
+<tr>
+<td>prompt</td>
+<td><code>prompts/tasks/extract_metrics.md</code></td>
+<td>用户输入 + scene fragments</td>
+</tr>
+</tbody>
+</table>
+<p>这种分离确保了：</p>
+<ul>
+<li>自动提取可以无人值守批量执行，适合定时调度</li>
+<li>人工修正保持完整的人机交互体验，适合精检验和修正</li>
+<li>两条路径共享同一套 <code>FinsToolService</code> + <code>MetricStore</code>，数据互通</li>
+</ul>
+<h3 id="56-dayu-cli-集成">5.6 dayu-cli 集成</h3>
+<p>新增 <code>flow</code> 子命令，注册到 CLI 三层结构：</p>
+<table>
+<thead>
+<tr>
+<th>改动文件</th>
+<th>改动内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cli/command_names.py</code></td>
+<td>新增 <code>FLOW_COMMAND = &quot;flow&quot;</code></td>
+</tr>
+<tr>
+<td><code>cli/arg_parsing.py</code></td>
+<td>新增 <code>flow</code> subparser，含 <code>batch-download</code> / <code>batch-process</code> / <code>batch-extract</code> / <code>schedule-download</code> 子命令</td>
+</tr>
+<tr>
+<td><code>cli/main.py</code></td>
+<td>新增 <code>flow</code> 命令分发分支</td>
+</tr>
+<tr>
+<td><code>cli/commands/flow.py</code>（新建）</td>
+<td><code>run_flow_command()</code> 实现，解析子命令后调用对应 flow</td>
+</tr>
+</tbody>
+</table>
+<h3 id="57-不做的事情">5.7 不做的事情</h3>
+<ol>
+<li><strong>不包装 interactive / prompt / write 命令</strong>：这些是人机交互路径，由 Host 强约束管理，不适合 Prefect task</li>
+<li><strong>自动提取不经 Host</strong>：Prefect 自动提取 task 直接构建 <code>AsyncAgent</code> 执行，不经过 Host/ChatService，因为无人机交互不需要 pending turn / resume / 两层记忆</li>
+<li><strong>不替换 dayu-agent 的 Host 并发治理</strong>：Host 的 <code>llm_api</code> lane 在人工修正 Chat 路径中仍然生效，Prefect 不干预</li>
+<li><strong>不替换 dayu-agent 的 CLI</strong>：<code>dayu-cli download</code> / <code>process</code> 等单次命令仍然保留，Prefect flow 是上层批量编排</li>
+<li><strong>不做跨节点分布式调度</strong>：一期使用 Prefect 单机模式（<code>prefect deploy</code> + 本地 work pool），不做 K8s/云端分布式部署</li>
+</ol>
+<hr>
+<h2 id="6-衍生指标加工层duckdb--dbt">6. 衍生指标加工层（DuckDB + dbt）</h2>
+<h3 id="61-定位与边界">6.1 定位与边界</h3>
+<p>一期已经完成了原始指标的提取和存储（DuckDB <code>raw_metrics</code> 表）。衍生指标（ROE、毛利率、增速等）是从原始指标出发的二次计算，属于数据加工 pipeline，不是 LLM 交互。</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>职责</th>
+<th>技术</th>
+<th>产出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>原始指标层</strong></td>
+<td>从财报 Markdown 提取结构化指标</td>
+<td>dayu-agent Agent + FinsToolService</td>
+<td>DuckDB <code>raw_metrics</code> + <code>corrections</code> 表 + <code>effective_metrics</code> 视图</td>
+</tr>
+<tr>
+<td><strong>衍生指标层</strong></td>
+<td>基于有效指标做二次计算</td>
+<td>dbt + DuckDB</td>
+<td>DuckDB 衍生 model（视图/表）</td>
+</tr>
+<tr>
+<td><strong>调度层</strong></td>
+<td>编排衍生加工流程</td>
+<td>Prefect</td>
+<td>定时/手动触发 dbt run</td>
+</tr>
+</tbody>
+</table>
+<p><strong>边界</strong>：衍生指标层不涉及 dayu-agent 的代码改动，完全是新增的 dbt 项目 + Prefect flow。dayu-agent 的唯一职责是提供 DuckDB 文件作为 dbt 的数据源。</p>
+<h3 id="62-架构">6.2 架构</h3>
+<img src="http://www.plantuml.com/plantuml/svg/XLPTJnj757tVNt45BwqYS1AAcY2b2XXlNufIuJwkP0sxOxErFMFDpk8wLIIN0dOe858vf7oqa0PZeZO6r1HSGyj3_qdb6JjF_8LsT-ruRJQf_6BTU-wPCtVElVPzYoF6xNHAiP8coI26qg3JT8OIJ7YKvr8O6DOv8eaKza5ca9vCC6eJ8qnJbC6WEkvyWaZWQmLWeXyVkQD-f4uw6SeCpDhHstVlt9ougm2ebF1EB3mI6RtPZaNDXnXkZIYF52M3z2HAO1WmKCuUGWbC-DL5KQpjYiftSgKWzmhYPFxgul60Aw0hP-1pXkDOvu2_uWpfF1PFqQn6ngqSqSST5lXdwNjGJM9zGMagYjcSgUC1G1P4l08rHRE-2_YOmxE8GwDU5sVbncLLldgXaI0U1nQcpEbhCCyKvipKevmoh959MqzEJe1OsXIBPRVUbtvR_qXHV0HPof9M1kaub7Qnrh1XwqbZHYDYyQHH_mNQf7AZq3W_TKdRaK5LLISZ7_lREyEXzNorMTeLotlYhEnsjIWtZiLvFQYzEEvqrvp3iVRPqAeiYUs_DD9zA6YUlvRB-ne9FnZ_B18DHq3kvEN6iTSraR_m-jrXcceJ3KwEggEHaTxpl5DYQPJ9c2Gnh5jp6cbMdZItg_A7FN6yqAeiYE8cM1WR6aaZbiGS_du65aSSfp7XCPxBO8qmb8qHbCRkwriS4GCnmto83JVgw_kKTr2m68idEjVkLG4tGDOMvUjdZYyBIs9bmwMCyiHxBnVNUOnHh97f1n6u1wAG5yMNylG0GixtrkyBZNh59L9rFatnkqaIZ5fMB8rOmYGQaKVRelYokLQ0U_11QxqiIwT3ihWkTtxz44BW1JgqdpgLKsxXU-cpV3R64CSQ4UihygWaVlxfJNxNnvBbizE8TpNwPxWpawtZRqNzmBEOs5zjbWw3B6PWvlDNUu1l3ODZLMOJZTpsldDiSS_SRe4tkDtJ_VCyDFH9proDWME8ZeEzuLFyWtkzGFSo9YKMj2x_5CjxYX_W57X3fhHdpObSy_XOUrn4TQlnnsFbMjufyhbcpBseHMscOwNNeC58Z0tuaff4yQKSPDj07ehXU43UxuJ_mNNUkWlpFK6WC6QJVaolfC1yWAHtuVeasKHH2EKOc9cOvK3Zrvv20V1jh4PjpIriRYs8qb6ZbfTFZ-LgLPIVDEi7_q4RbpysdsvwFp_Uu8lrLRW1tiO9cSImBSvo8Trc31CzvvJKLiKtMsyNWhSe54mCS8Jro-jsJ87EGZwPbpjviVZRcr8LqjJ0gQkBBGMWNqNWIdDOpWv5RLxir4EjiyFMyvL6RKkSLSN5lDWvbA_svMcnLNdX4tGV4yFvg_0l" alt="uml diagram"><h3 id="63-duckdb-共享模式">6.3 DuckDB 共享模式</h3>
+<p>dayu-agent 和 dbt 共用同一个 DuckDB 文件（<code>workspace/metrics.duckdb</code>），但读写职责严格分离：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>读</th>
+<th>写</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dayu-agent MetricStore</td>
+<td><code>effective_metrics</code> 视图（供 FinsToolService 查询）</td>
+<td><code>raw_metrics</code> / <code>corrections</code> 表 + <code>effective_metrics</code> 视图</td>
+</tr>
+<tr>
+<td>dbt</td>
+<td><code>effective_metrics</code> 视图（通过 source 定义）</td>
+<td><code>stg_*</code> / <code>fct_*</code> model（视图或表）</td>
+</tr>
+<tr>
+<td>Prefect dbt flow</td>
+<td>无</td>
+<td>触发 <code>dbt run</code>（dbt 内部执行写入）</td>
+</tr>
+</tbody>
+</table>
+<p>DuckDB 支持多进程并发读 + 单进程写。dayu-agent 的写入（逐条 upsert）和 dbt 的写入（批量 <code>CREATE TABLE AS SELECT</code>）不会同时操作同一张表，无写冲突。</p>
+<p><strong>关键约束</strong>：</p>
+<ul>
+<li>dbt model <strong>只读</strong> <code>effective_metrics</code> 视图，不直接访问 <code>raw_metrics</code> / <code>corrections</code> 表</li>
+<li>dayu-agent MetricStore <strong>不读</strong> dbt model</li>
+<li><code>effective_metrics</code> 视图是 dayu-agent 和 dbt 之间的<strong>唯一数据契约</strong>——dayu-agent 负责维护&quot;有效值&quot;逻辑（COALESCE 最新修正值），dbt 只消费结果，不重复实现修正合并逻辑</li>
+</ul>
+<h3 id="64-dbt-项目结构">6.4 dbt 项目结构</h3>
+<pre class="hljs"><code><div>workspace/
+├── metrics.duckdb              ← DuckDB 文件（dayu-agent + dbt 共享）
+└── dbt/                        ← 新增：dbt 项目
+    ├── dbt_project.yml         ← dbt 项目配置
+    ├── profiles.yml            ← DuckDB adapter 配置
+    ├── sources.yml             ← 定义 effective_metrics 为 source
+    ├── models/
+    │   ├── staging/
+    │   │   └── stg_metrics.sql ← 清洗标准化 + 科目映射（原始名 → 标准化名）
+    │   ├── marts/
+    │   │   ├── fct_roe.sql     ← ROE（按市场分区）
+    │   │   ├── fct_gross_margin.sql  ← 毛利率（按市场分区）
+    │   │   ├── fct_growth_rate.sql   ← 同比增速（按市场分区）
+    │   │   └── ...
+    │   └── schema.yml          ← model 测试定义
+    ├── seeds/
+    │   └── metric_mapping.csv  ← 科目映射规则（market × statement_type × raw_name → standardized_name）
+    └── macros/
+        └── ...
+</div></code></pre>
+<p><strong><code>sources.yml</code></strong>（将 dayu-agent 创建的视图声明为 dbt source）：</p>
+<pre class="hljs"><code><div><span class="hljs-attr">sources:</span>
+  <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">dayu_metrics</span>
+    <span class="hljs-attr">database:</span> <span class="hljs-string">metrics</span>
+    <span class="hljs-attr">schema:</span> <span class="hljs-string">main</span>
+    <span class="hljs-attr">tables:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">effective_metrics</span>
+        <span class="hljs-attr">description:</span> <span class="hljs-string">&quot;dayu-agent 维护的有效指标视图，已合并人工修正值&quot;</span>
+</div></code></pre>
+<p><strong><code>stg_metrics.sql</code></strong>（清洗标准化 + 科目映射，消费 <code>effective_metrics</code> 视图）：</p>
+<p><code>stg_metrics</code> 是衍生层最关键的 model——它负责将不同市场、不同行业的原始科目名映射到统一的标准化指标名。映射规则通过 <code>vars</code> 或 seed 表管理，<code>dbt run</code> 时注入。</p>
+<pre class="hljs"><code><div><span class="hljs-comment">-- stg_metrics: 原始科目 → 标准化指标</span>
+<span class="hljs-comment">-- 映射规则由 seed 表 metric_mapping 管理，可持续扩充</span>
+<span class="hljs-keyword">WITH</span> mapping <span class="hljs-keyword">AS</span> (
+    <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> {{ <span class="hljs-keyword">ref</span>(<span class="hljs-string">&#x27;metric_mapping&#x27;</span>) }}
+    <span class="hljs-keyword">WHERE</span> market <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;{{ var(&quot;market&quot;, &quot;CN&quot;) }}&#x27;</span>
+),
+effective <span class="hljs-keyword">AS</span> (
+    <span class="hljs-keyword">SELECT</span>
+        ticker,
+        market,
+        industry,
+        document_id,
+        metric_name <span class="hljs-keyword">AS</span> raw_metric_name,
+        effective_value,
+        unit,
+        currency,
+        <span class="hljs-keyword">period</span>,
+        statement_type,
+        source,
+        is_corrected,
+        extracted_at
+    <span class="hljs-keyword">FROM</span> {{ source(<span class="hljs-string">&#x27;dayu_metrics&#x27;</span>, <span class="hljs-string">&#x27;effective_metrics&#x27;</span>) }}
+)
+<span class="hljs-keyword">SELECT</span>
+    e.ticker,
+    e.market,
+    e.industry,
+    e.document_id,
+    e.raw_metric_name,
+    m.standardized_name,      <span class="hljs-comment">-- 标准化后的指标名（如&quot;应收账款&quot;、&quot;净利润&quot;）</span>
+    e.effective_value,
+    e.unit,
+    e.currency,
+    e.period,
+    e.statement_type,
+    e.source,
+    e.is_corrected,
+    e.extracted_at
+<span class="hljs-keyword">FROM</span> effective e
+<span class="hljs-keyword">LEFT</span> <span class="hljs-keyword">JOIN</span> mapping m <span class="hljs-keyword">ON</span> e.metric_name <span class="hljs-operator">=</span> m.raw_metric_name
+    <span class="hljs-keyword">AND</span> e.market <span class="hljs-operator">=</span> m.market
+    <span class="hljs-keyword">AND</span> e.statement_type <span class="hljs-operator">=</span> m.statement_type
+</div></code></pre>
+<p><strong><code>metric_mapping</code> seed 表</strong>（CSV → DuckDB，映射规则真源）：</p>
+<pre class="hljs"><code><div>market,statement_type,raw_metric_name,standardized_name
+CN,balance_sheet,应收账款,accounts_receivable
+CN,balance_sheet,存货,inventory
+CN,balance_sheet,所有者权益合计,total_equity
+CN,income_statement,营业收入,operating_revenue
+CN,income_statement,净利润,net_profit
+HK,balance_sheet,贸易及其他应收款,accounts_receivable
+HK,balance_sheet,存货,inventory
+HK,balance_sheet,权益总额,total_equity
+HK,income_statement,收入,operating_revenue
+HK,income_statement,本公司拥有人应占溢利,net_profit
+...
+</div></code></pre>
+<p><strong>关键设计</strong>：</p>
+<ul>
+<li>映射规则是<strong>可扩充的 seed 表</strong>，新增市场/行业只需追加 CSV 行 + <code>dbt seed</code></li>
+<li>未映射的原始科目 <code>standardized_name</code> 为 NULL，<code>fct_*</code> model 中用 <code>WHERE standardized_name IS NOT NULL</code> 过滤</li>
+<li>同一标准化名可以对应多个市场的不同原始科目名</li>
+<li>映射规则版本化（git 管理 CSV），可审计、可 diff</li>
+</ul>
+<p><strong><code>fct_roe.sql</code></strong>（ROE 衍生指标示例，消费标准化后的 <code>stg_metrics</code>）：</p>
+<p>衍生 model 只引用 <code>standardized_name</code>，不关心原始科目名。跨市场、跨行业的差异已在 <code>stg_metrics</code> + <code>metric_mapping</code> 层消解。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">WITH</span> equity <span class="hljs-keyword">AS</span> (
+    <span class="hljs-keyword">SELECT</span> ticker, market, <span class="hljs-keyword">period</span>, effective_value <span class="hljs-keyword">AS</span> net_equity
+    <span class="hljs-keyword">FROM</span> {{ <span class="hljs-keyword">ref</span>(<span class="hljs-string">&#x27;stg_metrics&#x27;</span>) }}
+    <span class="hljs-keyword">WHERE</span> standardized_name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;total_equity&#x27;</span>
+      <span class="hljs-keyword">AND</span> statement_type <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;balance_sheet&#x27;</span>
+),
+net_income <span class="hljs-keyword">AS</span> (
+    <span class="hljs-keyword">SELECT</span> ticker, market, <span class="hljs-keyword">period</span>, effective_value <span class="hljs-keyword">AS</span> net_profit
+    <span class="hljs-keyword">FROM</span> {{ <span class="hljs-keyword">ref</span>(<span class="hljs-string">&#x27;stg_metrics&#x27;</span>) }}
+    <span class="hljs-keyword">WHERE</span> standardized_name <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;net_profit&#x27;</span>
+      <span class="hljs-keyword">AND</span> statement_type <span class="hljs-operator">=</span> <span class="hljs-string">&#x27;income_statement&#x27;</span>
+)
+<span class="hljs-keyword">SELECT</span>
+    n.ticker,
+    n.market,
+    n.period,
+    n.net_profit,
+    e.net_equity,
+    <span class="hljs-keyword">CASE</span>
+        <span class="hljs-keyword">WHEN</span> e.net_equity <span class="hljs-operator">!=</span> <span class="hljs-number">0</span> <span class="hljs-keyword">THEN</span> n.net_profit <span class="hljs-operator">/</span> e.net_equity
+        <span class="hljs-keyword">ELSE</span> <span class="hljs-keyword">NULL</span>
+    <span class="hljs-keyword">END</span> <span class="hljs-keyword">AS</span> roe
+<span class="hljs-keyword">FROM</span> net_income n
+<span class="hljs-keyword">JOIN</span> equity e <span class="hljs-keyword">ON</span> n.ticker <span class="hljs-operator">=</span> e.ticker
+    <span class="hljs-keyword">AND</span> n.market <span class="hljs-operator">=</span> e.market
+    <span class="hljs-keyword">AND</span> n.period <span class="hljs-operator">=</span> e.period
+</div></code></pre>
+<p><strong>跨市场注意</strong>：</p>
+<ul>
+<li>A股和港股的币种不同（CNY vs HKD），衍生计算如果需要跨市场对比，需在 <code>stg_metrics</code> 或 <code>fct_*</code> 层做汇率换算</li>
+<li>一期不做跨市场对比，衍生指标在各自市场内计算</li>
+<li><code>fct_*</code> model 按 <code>market</code> 分区，不混算</li>
+</ul>
+<h3 id="65-prefect-衍生加工-flow">6.5 Prefect 衍生加工 flow</h3>
+<p>在 <code>dayu/flows/</code> 下新增衍生加工 flow，复用 Prefect 调度层：</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># dayu/flows/derive_flow.py（~100 行）</span>
+
+<span class="hljs-meta">@flow(<span class="hljs-params">name=<span class="hljs-string">&quot;derive_metrics_flow&quot;</span>, retries=<span class="hljs-number">1</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">derive_metrics_flow</span>(<span class="hljs-params">
+    *,
+    workspace_root: Path = ...,
+    select: <span class="hljs-built_in">str</span> = <span class="hljs-string">&quot;stg_metrics fct_*&quot;</span>,
+</span>) -&gt; DeriveResult:
+    <span class="hljs-string">&quot;&quot;&quot;衍生指标加工 flow。
+
+    1. 调用 dbt run 执行衍生模型
+    2. 调用 dbt test 执行数据质量校验
+    3. 返回加工结果摘要
+    &quot;&quot;&quot;</span>
+    ...
+
+<span class="hljs-meta">@task(<span class="hljs-params">retries=<span class="hljs-number">2</span>, retry_delay_seconds=<span class="hljs-number">30</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">dbt_run_task</span>(<span class="hljs-params">
+    dbt_project_dir: Path,
+    db_path: Path,
+    select: <span class="hljs-built_in">str</span>,
+</span>) -&gt; <span class="hljs-built_in">dict</span>[<span class="hljs-built_in">str</span>, <span class="hljs-type">Any</span>]:
+    <span class="hljs-string">&quot;&quot;&quot;执行 dbt run。&quot;&quot;&quot;</span>
+    ...
+
+<span class="hljs-meta">@task</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">dbt_test_task</span>(<span class="hljs-params">
+    dbt_project_dir: Path,
+    db_path: Path,
+</span>) -&gt; <span class="hljs-built_in">dict</span>[<span class="hljs-built_in">str</span>, <span class="hljs-type">Any</span>]:
+    <span class="hljs-string">&quot;&quot;&quot;执行 dbt test。&quot;&quot;&quot;</span>
+    ...
+</div></code></pre>
+<p><strong>端到端 pipeline</strong>（Prefect 编排）：</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@flow(<span class="hljs-params">name=<span class="hljs-string">&quot;full_pipeline_flow&quot;</span></span>)</span>
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">full_pipeline_flow</span>(<span class="hljs-params">
+    tickers: <span class="hljs-built_in">list</span>[<span class="hljs-built_in">str</span>],
+    *,
+    workspace_root: Path = ...,
+</span>) -&gt; <span class="hljs-literal">None</span>:
+    <span class="hljs-string">&quot;&quot;&quot;完整流水线：下载 → 处理 → 提取 → 衍生加工。&quot;&quot;&quot;</span>
+    <span class="hljs-comment"># 1. 下载</span>
+    download_results = batch_download_flow(tickers, workspace_root=workspace_root)
+
+    <span class="hljs-comment"># 2. 预处理</span>
+    process_results = batch_process_flow(tickers, workspace_root=workspace_root)
+
+    <span class="hljs-comment"># 3. 自动提取指标</span>
+    targets = build_extract_targets(download_results)
+    extract_results = batch_extract_metrics_flow(targets, workspace_root=workspace_root)
+
+    <span class="hljs-comment"># 4. 衍生指标加工</span>
+    derive_results = derive_metrics_flow(workspace_root=workspace_root)
+
+    <span class="hljs-comment"># 5. 返回全链路结果</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">&quot;download&quot;</span>: download_results,
+        <span class="hljs-string">&quot;process&quot;</span>: process_results,
+        <span class="hljs-string">&quot;extract&quot;</span>: extract_results,
+        <span class="hljs-string">&quot;derive&quot;</span>: derive_results,
+    }
+</div></code></pre>
+<h3 id="66-cli-集成">6.6 CLI 集成</h3>
+<p>扩展 <code>dayu-cli flow</code> 子命令：</p>
+<pre class="hljs"><code><div>dayu-cli flow derive                          # 执行衍生加工
+dayu-cli flow full-pipeline --tickers 600519,09988  # 完整流水线
+</div></code></pre>
+<h3 id="67-不做的事情一期">6.7 不做的事情（一期）</h3>
+<ol>
+<li><strong>不在 dayu-agent 代码中定义衍生指标</strong>：衍生指标全部由 dbt model 定义，dayu-agent 不感知衍生逻辑</li>
+<li><strong>不在 dayu-agent 代码中定义科目标准化映射</strong>：映射规则由 dbt seed 表 <code>metric_mapping.csv</code> 管理，可持续扩充</li>
+<li><strong>不在 Streamlit 中展示衍生指标</strong>：一期 Streamlit 只展示原始指标和修正历史，衍生指标通过 dbt / DuckDB 直接查询</li>
+<li><strong>不做衍生指标的人工修正</strong>：衍生指标是计算值，修正应该修正原始输入指标（写入 <code>corrections</code> 表），<code>effective_metrics</code> 视图自动反映修正后的值，衍生 model 重跑即可同步</li>
+<li><strong>dbt 不直接访问 raw_metrics / corrections 表</strong>：dbt 只通过 <code>effective_metrics</code> 视图消费数据，修正合并逻辑由 dayu-agent 单一维护</li>
+<li><strong>一期不做跨市场衍生计算</strong>：<code>fct_*</code> model 按 <code>market</code> 分区，A股和港股各自计算；跨市场对比（需汇率换算）留到二期</li>
+<li><strong>不做 dbt model 的自动生成</strong>：一期手动编写 dbt model 和 metric_mapping seed，二期可考虑从指标定义自动生成</li>
+</ol>
+<hr>
+<h2 id="7-工作量估算">7. 工作量估算</h2>
+<h3 id="71-总览">7.1 总览</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>新建代码</th>
+<th>修改代码</th>
+<th>测试代码</th>
+<th>合计</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MinerU 转换模块</td>
+<td>~250 行</td>
+<td>—</td>
+<td>~150 行</td>
+<td>~400 行</td>
+</tr>
+<tr>
+<td>转换引擎抽象</td>
+<td>~40 行</td>
+<td>—</td>
+<td>~30 行</td>
+<td>~70 行</td>
+</tr>
+<tr>
+<td>Pipeline 泛化</td>
+<td>—</td>
+<td>~200 行</td>
+<td>~300 行</td>
+<td>~500 行</td>
+</tr>
+<tr>
+<td>写工具 + MetricStore(DuckDB)</td>
+<td>~350 行</td>
+<td>~50 行</td>
+<td>~250 行</td>
+<td>~650 行</td>
+</tr>
+<tr>
+<td>Scene + Prompt 扩展</td>
+<td>~30 行</td>
+<td>~20 行</td>
+<td>—</td>
+<td>~50 行</td>
+</tr>
+<tr>
+<td>Streamlit 页面扩展</td>
+<td>~200 行</td>
+<td>~30 行</td>
+<td>—</td>
+<td>~230 行</td>
+</tr>
+<tr>
+<td>Prefect 调度层（download/process/extract/derive）</td>
+<td>~810 行</td>
+<td>~30 行</td>
+<td>~250 行</td>
+<td>~1090 行</td>
+</tr>
+<tr>
+<td>dbt 项目（stg + fct model + metric_mapping seed）</td>
+<td>~400 行</td>
+<td>—</td>
+<td>~100 行</td>
+<td>~500 行</td>
+</tr>
+<tr>
+<td>配置更新</td>
+<td>~10 行</td>
+<td>~15 行</td>
+<td>—</td>
+<td>~25 行</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>~2090 行</strong></td>
+<td><strong>~345 行</strong></td>
+<td><strong>~1080 行</strong></td>
+<td><strong>~3515 行</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-分阶段实施计划">7.2 分阶段实施计划</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>内容</th>
+<th>依赖</th>
+<th>预估</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P1</strong></td>
+<td>MinerU 转换模块 + 引擎抽象</td>
+<td>无</td>
+<td>3 天</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>Pipeline 泛化 + source upsert 校验放宽</td>
+<td>P1</td>
+<td>2 天</td>
+</tr>
+<tr>
+<td><strong>P3</strong></td>
+<td>写工具 + MetricStore(DuckDB) + FinsToolService 扩展</td>
+<td>P2</td>
+<td>3 天</td>
+</tr>
+<tr>
+<td><strong>P4</strong></td>
+<td>Scene 扩展 + Prompt 更新</td>
+<td>P3</td>
+<td>1 天</td>
+</tr>
+<tr>
+<td><strong>P5</strong></td>
+<td>Streamlit 页面扩展</td>
+<td>P3, P4</td>
+<td>2 天</td>
+</tr>
+<tr>
+<td><strong>P6</strong></td>
+<td>Prefect 调度层（runtime + download/process flow）</td>
+<td>P2</td>
+<td>3 天</td>
+</tr>
+<tr>
+<td><strong>P7</strong></td>
+<td>Prefect 自动指标提取 flow + 定时调度 + CLI 集成 + prompt 模板</td>
+<td>P3, P6</td>
+<td>2 天</td>
+</tr>
+<tr>
+<td><strong>P8</strong></td>
+<td>dbt 项目（stg_metrics + metric_mapping seed + fct model）+ 衍生加工 flow + 端到端 pipeline</td>
+<td>P3, P7</td>
+<td>3 天</td>
+</tr>
+<tr>
+<td><strong>P9</strong></td>
+<td>测试补齐 + pyright 通过</td>
+<td>P1-P8</td>
+<td>3 天</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td></td>
+<td></td>
+<td><strong>~22 天（4.5 周）</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="73-与新建独立项目对比">7.3 与新建独立项目对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>新建独立项目</th>
+<th>基于 dayu-agent 扩展</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLI 框架</td>
+<td>新建三层（~500 行）</td>
+<td>零改动</td>
+</tr>
+<tr>
+<td>下载器</td>
+<td>重新实现巨潮 + 披露易（~2000 行）</td>
+<td>零改动</td>
+</tr>
+<tr>
+<td>存储层</td>
+<td>重新实现仓储协议 + 文件系统（~1500 行）</td>
+<td>扩展 MetricStore(DuckDB)（~350 行）</td>
+</tr>
+<tr>
+<td>Host 托管</td>
+<td>无</td>
+<td>复用完整九项能力</td>
+</tr>
+<tr>
+<td>Chat 能力</td>
+<td>新建多轮会话框架（~2000 行）</td>
+<td>复用 ChatService + 两层记忆</td>
+</tr>
+<tr>
+<td>Streamlit UI</td>
+<td>新建</td>
+<td>扩展 1 个 Tab（~200 行）</td>
+</tr>
+<tr>
+<td>工具注入</td>
+<td>新建</td>
+<td>复用 toolset registrar</td>
+</tr>
+<tr>
+<td>MinerU 集成</td>
+<td>新建（~250 行）</td>
+<td>新建（~250 行，相同）</td>
+</tr>
+<tr>
+<td>Processor</td>
+<td>新建 Markdown 处理器（~500 行）</td>
+<td>零改动</td>
+</tr>
+<tr>
+<td>Scene 体系</td>
+<td>新建</td>
+<td>复用 + 扩展</td>
+</tr>
+<tr>
+<td>调度层</td>
+<td>新建调度框架（~2000 行）</td>
+<td>集成 Prefect（~810 行）</td>
+</tr>
+<tr>
+<td>衍生加工</td>
+<td>新建计算引擎（~1500 行）</td>
+<td>集成 dbt + DuckDB（~300 行）</td>
+</tr>
+<tr>
+<td><strong>预估总工作量</strong></td>
+<td><strong>12 周</strong></td>
+<td><strong>4.5 周</strong></td>
+</tr>
+<tr>
+<td><strong>复用率</strong></td>
+<td>0%</td>
+<td>~89%</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-验证计划">8. 验证计划</h2>
+<h3 id="81-mineru-替换验证">8.1 MinerU 替换验证</h3>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PDF → Markdown 转换正确性</td>
+<td>下载 3 份 A 股 + 3 份港股年报，验证 Markdown 表格还原质量</td>
+</tr>
+<tr>
+<td>Pipeline 端到端</td>
+<td><code>dayu-cli download</code> 下载新财报，确认产出 <code>.md</code> 而非 <code>_docling.json</code></td>
+</tr>
+<tr>
+<td>Processor 路由</td>
+<td><code>dayu-cli interactive</code> 中调用 <code>get_table</code> 工具，确认走 <code>FinsMarkdownProcessor</code></td>
+</tr>
+<tr>
+<td>旧数据兼容</td>
+<td>确认已有 <code>_docling.json</code> 文档仍可被 <code>FinsDoclingProcessor</code> 处理</td>
+</tr>
+<tr>
+<td>中断恢复</td>
+<td>模拟下载中断后恢复，确认 <code>.md</code> 产出物被正确探测和复用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-指标提取与修正验证">8.2 指标提取与修正验证</h3>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动提取（无人工）</td>
+<td><code>dayu-cli flow batch-extract</code> 执行后，确认 DuckDB <code>raw_metrics</code> 表有数据，source 全部为 <code>auto_extracted</code></td>
+</tr>
+<tr>
+<td>自动提取无 Host</td>
+<td>确认 extract task 执行过程中 Host SQLite 无新增 run 记录</td>
+</tr>
+<tr>
+<td>DuckDB 读写</td>
+<td>FinsToolService <code>upsert_metric</code> 写入后，<code>list_metrics</code> 能读回有效值</td>
+</tr>
+<tr>
+<td>修正追溯</td>
+<td>Chat 修正后，<code>corrections</code> 表有追加记录，<code>effective_metrics</code> 视图返回修正后的值</td>
+</tr>
+<tr>
+<td>人工检查</td>
+<td>Chat 中指示&quot;看看提取了哪些指标&quot;，确认 <code>list_extracted_metrics</code> 返回自动提取的结果</td>
+</tr>
+<tr>
+<td>人工修正</td>
+<td>Chat 中指示&quot;修正应收账款为 12.5 亿&quot;，确认 <code>corrections</code> 表有修正记录</td>
+</tr>
+<tr>
+<td>修正历史</td>
+<td><code>get_metric_corrections</code> 返回完整修正记录（含修正人、原因、时间戳）</td>
+</tr>
+<tr>
+<td>多轮上下文</td>
+<td>修正后继续对话，确认 LLM 知道修正后的值</td>
+</tr>
+<tr>
+<td>人工重新提取</td>
+<td>Chat 中指示&quot;重新提取利润表&quot;，确认覆盖 <code>raw_metrics</code> 中的值，source 为 <code>chat_extracted</code></td>
+</tr>
+<tr>
+<td>Streamlit 展示</td>
+<td>filing_tab 中展示已提取指标（标注 source）、修正历史、自动提取 flow 状态</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-prefect-调度验证">8.3 Prefect 调度验证</h3>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>批量下载</td>
+<td><code>dayu-cli flow batch-download --tickers 600519,09988 --start 2024-01-01</code>，确认两只股票都下载成功</td>
+</tr>
+<tr>
+<td>批量处理</td>
+<td><code>dayu-cli flow batch-process --tickers 600519,09988</code>，确认 processed 产物生成</td>
+</tr>
+<tr>
+<td>批量提取</td>
+<td><code>dayu-cli flow batch-extract --tickers 600519,09988 --statement balance_sheet</code>，确认 DuckDB <code>raw_metrics</code> 表有数据，source 为 <code>auto_extracted</code></td>
+</tr>
+<tr>
+<td>失败重试</td>
+<td>模拟网络故障，确认 Prefect 自动重试 download task</td>
+</tr>
+<tr>
+<td>并发控制</td>
+<td>同时下载 5 只 A 股，确认 Prefect concurrency limit 生效（不突破巨潮限流）</td>
+</tr>
+<tr>
+<td>缓存命中</td>
+<td>重复执行同一 flow，确认 download task 被缓存跳过</td>
+</tr>
+<tr>
+<td>定时调度</td>
+<td><code>dayu-cli flow schedule-download --cron &quot;*/5 * * * *&quot;</code> 部署后，确认 Prefect 按 cron 定时触发</td>
+</tr>
+<tr>
+<td>自动提取无人工</td>
+<td>确认 extract task 全程无人工介入，LLM 工具循环自主完成提取和持久化</td>
+</tr>
+<tr>
+<td>自动提取不经 Host</td>
+<td>确认 extract task 不创建 Host session/run，不写入 Host SQLite</td>
+</tr>
+</tbody>
+</table>
+<h3 id="84-衍生指标加工验证">8.4 衍生指标加工验证</h3>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dbt source 可读</td>
+<td><code>dbt source freshness</code> 确认 <code>effective_metrics</code> 视图可被 dbt 读取</td>
+</tr>
+<tr>
+<td>stg_metrics 正确</td>
+<td><code>dbt run --select stg_metrics</code> 后，确认原始科目名通过 <code>metric_mapping</code> 映射到 <code>standardized_name</code></td>
+</tr>
+<tr>
+<td>科目映射覆盖</td>
+<td>确认 A 股和港股的同一标准化指标（如 <code>total_equity</code>）分别映射到不同的原始科目名</td>
+</tr>
+<tr>
+<td>衍生指标计算</td>
+<td><code>dbt run --select fct_roe</code> 后，确认 A 股和港股各自独立计算 ROE，不混算</td>
+</tr>
+<tr>
+<td>修正联动</td>
+<td>Chat 修正原始指标后，重新 <code>dbt run</code>，确认衍生指标自动反映修正后的值（经 <code>effective_metrics</code> 视图传递）</td>
+</tr>
+<tr>
+<td>dbt test</td>
+<td><code>dbt test</code> 通过，无 not_null / unique 违规</td>
+</tr>
+<tr>
+<td>DuckDB 并发</td>
+<td>dayu-agent 写入 <code>raw_metrics</code> 时，dbt 读取不阻塞</td>
+</tr>
+<tr>
+<td>衍生加工 flow</td>
+<td><code>dayu-cli flow derive</code> 执行后，确认 dbt model 全部构建成功</td>
+</tr>
+<tr>
+<td>端到端 pipeline</td>
+<td><code>dayu-cli flow full-pipeline --tickers 600519</code> 完整执行 download → process → extract → derive，确认衍生指标可查</td>
+</tr>
+</tbody>
+</table>
+<h3 id="85-全局验证">8.5 全局验证</h3>
+<table>
+<thead>
+<tr>
+<th>验证项</th>
+<th>方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pyright</td>
+<td>无新增类型错误</td>
+</tr>
+<tr>
+<td>测试覆盖</td>
+<td>新增代码单文件覆盖率 &gt;= 80%</td>
+</tr>
+<tr>
+<td>端到端</td>
+<td>Prefect flow 完整执行：download → process → extract → derive（无人工介入），确认衍生指标可查；随后 Chat 中人工修正原始指标（写入 <code>corrections</code>），重新 <code>dbt run</code> 后衍生指标自动同步更新（经 <code>effective_metrics</code> 视图传递）</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
