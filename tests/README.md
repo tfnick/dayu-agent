@@ -375,6 +375,8 @@ Fins 相关改动时，至少同步更新：
 - `tests/fins/test_ingestion_tools.py`
 - `tests/fins/test_storage_split_repositories.py`
 - 受影响的 pipeline / processor 测试
+- `tests/fins/test_mineru_export.py` 需要守住 MinerU 云 API 转换客户端的契约：HTTP 调用序列（申请上传 URL → PUT → 轮询 → 下载 zip 取 full.md）、Bearer 认证头、API 业务错误码（A0202 / -60018 等）映射、轮询超时/失败状态、zip 路径穿越防护与缺 full.md 回退。转换函数签名 `convert_pdf_bytes_to_markdown_bytes` 对齐 `Callable[[bytes, str], bytes]` 协议。
+- `tests/cli/test_convert_command.py` 需要守住 `dayu-cli convert` 子命令：`--pdf` / `--output` 的 argparse 装配、PDF 缺失/API 错误时的非零退出码、输出父目录自动创建。
 - `tests/fins/test_cli_formatters_coverage.py` 需要继续守住 Fins pipeline 事件即使内部收口为枚举，也保持原有小写字符串值兼容 CLI 输出与 fixture 构造。
 - `tests/fins/test_search_mode_and_scale.py`、`tests/fins/test_fins_tools_service.py` 与 `tests/fins/test_fins_tools_service_helpers_coverage.py` 还要守住 Fins tools 拆分边界：搜索模型、搜索引擎和通用 helper 的测试必须分别直接绑定 `search_models.py`、`search_engine.py`、`service_helpers.py` 真源，不能再经由 `service.py` 兼容出口导入私有符号。
 - `tests/engine/test_cli_running_config.py` 与 `tests/fins/test_fins_runtime_tool_service.py` 还要继续守住 direct operation 的 CLI 规范化真源：`_build_fins_command()` 必须先经过 `prepare_cli_args`，runtime 在进入 pipeline 前也必须消费规范化后的 ticker、alias、公司名与上传进度事件名，不能把原始 CLI god-bag 重新透传下去；同时 `upload_filing/upload_material --action delete` 必须允许 `files=None` 进入 runtime，而不是在命令构建阶段提前报错。

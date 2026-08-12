@@ -8,7 +8,7 @@
 
 from __future__ import annotations
 
-from dayu.cli.command_names import FINS_COMMANDS, HOST_COMMANDS
+from dayu.cli.command_names import CONVERT_COMMAND, FINS_COMMANDS, HOST_COMMANDS
 from dayu.cli.arg_parsing import parse_arguments
 from dayu.console_output import configure_standard_streams_for_console_output
 from dayu.process_lifecycle.exit_codes import EXIT_CODE_SIGINT
@@ -67,6 +67,11 @@ def main() -> int:
             from dayu.cli.commands.write import run_write_command
 
             return run_write_command(args)
+        if args.command == CONVERT_COMMAND:
+            # convert 会调用 MinerU 云 API 并访问本地文件，延迟到命中命令时导入。
+            from dayu.cli.commands.convert import run_convert_command
+
+            return run_convert_command(args)
         # argparse subparsers 已声明 dest="command", required=True，未匹配
         # 任何已注册命令时会在 parse_arguments() 阶段直接退出，因此本处
         # 不再出现"未命中分支"的运行时分支。

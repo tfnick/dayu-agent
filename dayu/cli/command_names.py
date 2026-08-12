@@ -20,4 +20,7 @@ FINS_COMMANDS = frozenset(
 
 HOST_COMMANDS = frozenset({"sessions", "runs", "cancel", "host"})
 
-__all__ = ["FINS_COMMANDS", "HOST_COMMANDS"]
+CONVERT_COMMAND = "convert"
+"""独立 PDF→Markdown 转换子命令名。"""
+
+__all__ = ["FINS_COMMANDS", "HOST_COMMANDS", "CONVERT_COMMAND"]

@@ -273,6 +273,7 @@ dayu-cli <subcommand> [参数]
 | `process` | 全量预处理（最终用户可无视） |
 | `process_filing` | 预处理单份 filing（最终用户可无视） |
 | `process_material` | 预处理单份 material（最终用户可无视） |
+| `convert` | 用 MinerU 云 API 将本地 PDF 转为 Markdown（需先设置 `MINERU_API_KEY`） |
 | `conv` | 管理带 label 的可恢复 CLI 对话（最终用户可无视） |
 | `sessions` | 列出或关闭宿主会话（最终用户可无视） |
 | `runs` | 列出运行记录（最终用户可无视） |
@@ -764,6 +765,36 @@ dayu-cli process --ticker AAPL --ci --document-id fil_001 --document-id fil_002
 - 预处理命令主要供开发和数据准备场景使用，最终用户通常不需要手动执行。
 - 快照会写入 `workspace/portfolio/{ticker}/processed`。
 - 传入 `--document-id` 时，只会重建这些文档的快照；不会清空同一 ticker 下其它 processed 结果。
+
+### 3.8 本地 PDF 转换：`convert`
+
+命令用途：
+通过 MinerU 云端精准解析 API 把本地 PDF 转成 Markdown，适合中文财报等需要高质量表格还原的场景。
+转换参数（模型、语言、公式/表格识别开关、轮询间隔与超时）使用内置默认值，暂不支持命令行配置。
+
+前置条件：
+- 在 [mineru.net](https://mineru.net) API 管理页面创建 Token，并设置环境变量：
+
+```bash
+export MINERU_API_KEY=你的token
+```
+
+参数 / 说明：
+
+| 参数 | 说明 |
+|------|------|
+| `--pdf` | 必填，本地 PDF 文件路径 |
+| `--output` | 必填，Markdown 输出路径（父目录不存在时自动创建） |
+
+命令示例：
+
+```bash
+dayu-cli convert --pdf ./年报.pdf --output ./年报.md
+```
+
+命令说明：
+- API Key 缺失、认证失败、每日解析额度用尽、轮询超时等情况会给出明确错误并返回非零退出码。
+- 单文件转换仅消耗 MinerU 云端额度，不涉及本地 Docling；下载链路仍产出 `_docling.json`，不受影响。
 
 ## 4. 自动写作详解
 

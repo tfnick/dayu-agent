@@ -16,5 +16,8 @@ SERPER_API_KEY_ENV = "SERPER_API_KEY"
 FMP_API_KEY_ENV = "FMP_API_KEY"
 """Financial Modeling Prep API Key 环境变量名。"""
 
+MINERU_API_KEY_ENV = "MINERU_API_KEY"
+"""MinerU 云端解析 API Key 环境变量名。"""
+
 FINS_PROCESSOR_PROFILE_ENV = "FINS_PROCESSOR_PROFILE"
 """处理器性能 profiling 开关环境变量名。"""

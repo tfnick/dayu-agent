@@ -88,6 +88,22 @@ direct operation 关注的是：
 
 这两条路径共享底层仓储和处理器，但不是同一个执行单元，也不共享 Agent 契约。
 
+### 2.3 为什么 MinerU 转换是独立能力
+
+`dayu/fins/mineru_export.py` 是仓库内调用 MinerU 云端精准解析 API 的**唯一**
+收敛点，与 `docling_export.py` 的定位一致，但不属于上述两条执行路径，也不经过
+`FinsService` / Host：它是独立的 PDF→Markdown 转换能力，当前由 CLI `convert`
+子命令直接调用，供用户把本地已下载的财报 PDF 转为 Markdown。
+
+- 稳定签名：`convert_pdf_bytes_to_markdown_bytes(raw_data, stream_name) -> bytes`，
+  对齐 `Callable[[bytes, str], bytes]` 协议，后续 P2 泛化 pipeline 时可复用。
+- 实现链路：`POST /api/v4/file-urls/batch` 申请上传 URL → `PUT` 上传 → 轮询
+  `GET /api/v4/extract-results/batch/{batch_id}` → 下载 zip 取 `full.md`。
+- 配置：API Key 走 `MINERU_API_KEY` 环境变量（`dayu/contracts/env_keys.py`）；
+  转换参数（模型/语言/公式/表格开关/轮询间隔与超时）使用模块级常量默认值。
+- 约束：下载链路仍产出 `_docling.json`，本能力不改变下载链路现状；错误统一
+  抛 `MineruApiError`（含轮询超时、结果异常子类），CLI 侧捕获后以非零退出码上报。
+
 ## 3. 对外接口
 
 ### 3.1 FinsRuntimeProtocol

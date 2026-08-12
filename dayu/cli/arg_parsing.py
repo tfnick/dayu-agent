@@ -673,6 +673,11 @@ def _create_parser() -> argparse.ArgumentParser:
     process_material_parser = subparsers.add_parser("process_material", help="处理单个 material")
     _add_fins_process_single_args(process_material_parser)
 
+    convert_parser = subparsers.add_parser("convert", help="使用 MinerU 云 API 将 PDF 转为 Markdown")
+    convert_parser.add_argument("--pdf", required=True, help="本地 PDF 文件路径")
+    convert_parser.add_argument("--output", required=True, help="Markdown 输出路径")
+    _add_global_args(convert_parser)
+
     # 初始化子命令
     init_parser = subparsers.add_parser("init", help="初始化工作区并配置模型供应商")
     init_parser.add_argument(
