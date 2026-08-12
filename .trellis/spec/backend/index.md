@@ -115,18 +115,3 @@
 3. 按触发规则更新对应 README。
 4. 最终说明中明确：改了什么、验证了什么、还有什么风险或未覆盖项。
 
----
-
-## 开发指南链接索引
-
-各包级开发指南以仓库 README 为真源，编写对应包代码前请阅读：
-
-| 指南 | 链接 |
-|------|------|
-| dayu_dev_guideline | [dayu/README.md](../../../dayu/README.md) |
-| dayu_dev_fins_guideline | [dayu/fins/README.md](../../../dayu/fins/README.md) |
-| dayu_dev_host_guideline | [dayu/host/README.md](../../../dayu/host/README.md) |
-| dayu_dev_engine_guideline | [dayu/engine/README.md](../../../dayu/engine/README.md) |
-| dayu_dev_config_guideline | [dayu/config/README.md](../../../dayu/config/README.md) |
-| dayu_dev_web_guideline | [dayu/web/README.md](../../../dayu/web/README.md) |
-| tests_guideline | [tests/README.md](../../../tests/README.md) |
