@@ -37,6 +37,34 @@
 - 设计下层组件接口时，必须假设上层组件不存在，只考虑上层调用需求，不向上泄漏实现细节。
 - 财报文档存取必须且只能通过 `dayu.fins.storage` 下的仓储协议与仓储实现完成。
 
+#### Prefect 调度层与四层架构的关系
+
+Prefect 是 dayu-agent 四层架构（`UI → Service → Host → Agent`）**之上的独立编排层**，不在分层约束范围内。两者的关系如下：
+
+**三条调用链路的层级穿透**：
+
+```
+Prefect 链路（编排层，不在四层内）：
+  Prefect flow → FinsRuntime.execute()           ← 跳过 UI/Service/Host
+              → AsyncAgent.execute(prompt)        ← 跳过 UI/Service/Host
+  
+CLI download/process 链路（标准四层）：
+  CLI(UI) → FinsService.submit(Service) → host.run_operation_sync(Host) → FinsRuntime → Pipeline(Agent)
+
+Chat 链路（标准四层）：
+  CLI/Streamlit(UI) → ChatService(Service) → host.run_agent_stream(Host) → AsyncAgent(Agent)
+```
+
+**关键约束**：
+
+- Prefect flow / task 代码放在 `dayu/flows/`，**只含 Prefect 装饰器与编排逻辑**，不掺业务逻辑
+- Prefect 直接驱动的提取业务逻辑放在 `dayu/fins/extraction/`，作为纯领域模块，不依赖 Prefect
+- Pipeline 操作（download/process/upload）走 `FinsRuntime.execute()`，不经过 Host（Prefect 自身提供 task 状态追踪、重试、并发控制）
+- 自动提取走 `AsyncAgent` 直调，不经过 Host/ChatService（Prefect 自身提供取消/重试/状态）
+- CLI 路径**必须**经过 Host——`FinsService.submit()` 强制调用 `host.run_operation_sync()`，不可跳过
+- 两套并发治理并存：Host `llm_api` lane 管 Chat 路径，Prefect task concurrency 管自动提取路径。两者并行，不互相干扰
+- 这是对"Host 对 Agent 生命周期是强约束真源"的**有意偏离**——仅适用于 Prefect 编排的非交互场景。详细记录见 PRD §1.4
+
 ### 编码硬约束
 
 - 函数必须提供完整中文 docstring，至少包含参数、返回值、异常。

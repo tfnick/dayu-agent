@@ -89,7 +89,7 @@ dayu-agent 的 Docling 集成已经高度收敛，替换为 MinerU 的改动集�
 
 | 改动区域 | 改动量 | 说明 |
 |---------|--------|------|
-| 新建 MinerU 运行时模块 | ~250 行 | `dayu/fins/mineru_export.py`，提供 `convert_pdf_bytes_to_markdown_bytes(raw_data, stream_name) -> bytes`，内含 PDF 拆分 → MinerU 转换 → Markdown 合并 |
+| 新建 MinerU 云 API 客户端 | ~120 行 | `dayu/fins/mineru_export.py`，提供 `convert_pdf_bytes_to_markdown_bytes(raw_data, stream_name) -> bytes`，内含 HTTP POST 上传 → 等待解析 → 返回 Markdown |
 | 转换引擎抽象 | ~40 行 | 新建 `dayu/fins/conversion_engine.py`，定义 `PdfToConvertedBytes` 类型别名 + 配置驱动选择 Docling 或 MinerU |
 | CnPipeline 改造 | ~30 行 | `cn_pipeline.py` 通用化转换函数注入点，默认改为 MinerU |
 | Cn download filing workflow | ~40 行 | `cn_download_filing_workflow.py` 产出物后缀从 `_docling.json` 改为 `.md`，`content_type` 从 `application/json` 改为 `text/markdown` |
@@ -100,9 +100,9 @@ dayu-agent 的 Docling 集成已经高度收敛，替换为 MinerU 的改动集�
 | Cn download protocols | ~10 行 | `cn_download_protocols.py` 的 property 名和类型泛化 |
 | Upload Service 泛化 | ~30 行 | `docling_upload_service.py` 类名 → `ConvertedUploadService`，`DOCLING_FILE_SUFFIX` → `CONVERTED_FILE_SUFFIX`，内部方法名泛化 |
 | SEC pipeline / upload workflow | ~10 行 | 导入和实例化类名同步 |
-| 配置项新增 | ~5 行 | `run.json` 新增 `conversion_engine: "mineru"` |
+| 配置项新增 | ~10 行 | `run.json` 新增 `conversion_engine: "mineru"` 及 `mineru_api_key` |
 | 测试更新 | ~300 行 | 受影响测试文件适配新后缀和新函数名 |
-| **总计** | **~770 行** | 其中新代码 ~290 行，改动 ~200 行，测试 ~300 行 |
+| **总计** | **~640 行** | 其中新代码 ~160 行，改动 ~200 行，测试 ~300 行 |
 
 #### 1.3.4 Chat + Streamlit 复用可行性
 
@@ -125,6 +125,65 @@ dayu-agent 已有的 Chat + Streamlit 栈完整覆盖"人工修正"场景：
 2. 在 `fins_tools.py` 新增写工具注册
 3. 在 `prompts/` 新增或扩展 scene
 4. 在 `streamlit/pages/` 扩展展示页面
+
+### 1.4 架构偏离说明：Prefect 不经过四层运行时
+
+本项目在 Prefect 批量和提取路径上**有意偏离** dayu-agent 的 CLAUDE.md 架构硬约束，特此记录。
+
+**偏离的本质**：
+
+Prefect 不经过 `UI → Service → Host → Agent` 四层运行时，而是**直接驱动底层的 `FinsRuntime` 和 `AsyncAgent`**。CLAUDE.md 约束"严格遵守分层架构"和"Host 对 Agent 生命周期是强约束真源"。CLI 路径严格遵守该约束（`FinsService.submit()` → `host.run_operation_sync()`），但 Prefect 作为独立编排层有意跳过了 Service 和 Host。
+
+**三条链路的实际穿透层级**：
+
+```
+Prefect 管线操作（download/process）：
+  Prefect task → FinsRuntime.execute()  →  Pipeline
+                    ↑ 跳过 UI/Service/Host
+
+Prefect 自动提取（extract）：
+  Prefect task → ExtractionRunner  →  AsyncAgent + ToolRegistry
+                     ↑ 跳过 UI/Service/Host
+
+CLI download/process（标准四层）：
+  CLI(UI)  →  FinsService.submit(Service)  →  host.run_operation_sync(Host)  →  FinsRuntime  →  Pipeline
+
+CLI interactive / Chat（标准四层）：
+  Streamlit(UI)  →  ChatService(Service)  →  host.run_agent_stream(Host)  →  AsyncAgent(Agent)
+```
+
+> **验证依据**：`FinsService._execute_sync()`（`dayu/services/fins_service.py:122`）强制调用 `self.host.run_operation_sync()`——CLI 路径不可绕过 Host。Prefect 不走 `FinsService`，直接调 `FinsRuntime.execute()`，因此跳过了 Service 和 Host。
+
+**理由**：
+
+| # | 考量 | 说明 |
+|---|------|------|
+| 1 | 无人机交互 | 自动提取是程序驱动的单次 LLM + 工具循环，不需要多轮会话、pending turn、resume、两层记忆——这些是 Host 为人机交互提供的能力，在批量场景中无收益 |
+| 2 | 治理等效 | Host 提供的 run registry、concurrency permit、cancellation bridge 分别由 Prefect task 状态、task concurrency、task 取消机制等效覆盖，不缺失治理能力 |
+| 3 | 避免跨进程不一致 | Prefect task 绕过 Host 避免了 task 跨进程执行时与 Host SQLite 状态不一致的风险 |
+| 4 | 代码简洁 | `FinsToolService` 和 `AsyncAgent` 均可脱离 Host 独立构建，直接驱动比引入 `FinsRuntime.execute()` → `Host.run_operation_sync` 中转层更简洁 |
+
+**代价与缓解**：
+
+| 代价 | 缓解措施 |
+|------|---------|
+| **两个并发治理真源并存**：Host `llm_api` lane 管 Chat 路径，Prefect task concurrency 管自动提取路径 | §5.5.1 明确分工；Prefect task 配置独立 concurrency limit，不互相干扰 |
+| **无 Host run 记录**：自动提取的执行不被 Host 审计 | Prefect task 状态 + flow run 日志提供等效审计；`ExtractResult` 记录提取摘要供查询 |
+| **治理不能共享**：后续若需要统一限流/审计/取消恢复，两套体系需分别维护 | 确认这是有意识的取舍；批量提取与人工交互本质不同，统一反而增加复杂度 |
+
+**提取代码存放位置**：
+
+提取相关的业务逻辑（PromptResolver、ExtractionRunner、模板变量注入）放在 `dayu/fins/extraction/`，作为纯领域模块，不依赖 Prefect。Prefect flow 文件（`dayu/flows/extract_flow.py`）只是薄壳，负责 `@flow`/`@task` 编排和调度配置，调用 `ExtractionRunner.run()` 执行实际提取。
+
+```
+dayu/flows/extract_flow.py        ← Prefect 薄壳（@flow, @task）
+dayu/fins/extraction/             ← 提取领域逻辑
+  ├── extraction_runner.py        ← 组装 Agent + ToolRegistry + MetricStore
+  ├── prompt_resolver.py          ← 分层解析 extract_metrics*.md
+  └── extraction_models.py        ← ExtractResult / ExtractionTarget
+```
+
+**决策**：这是有意偏离，不是设计遗漏。两套路径（Prefect → Agent vs ChatService → Host → Agent）并行运行，保持各自的责任边界清晰。
 
 ---
 
@@ -294,7 +353,7 @@ note right of ExtractRunner
   6. LLM 工具循环：
      get_financial_statement → 读取 .md
      upsert_financial_metric → 写入 raw_metrics
-  7. 不经 Host / 不经 ChatService
+  7. 不经 Host / 不经 ChatService（有意偏离，见 §1.4）
   8. source="auto_extracted"
 end note
 
@@ -352,7 +411,7 @@ end note
 | **Storage 层** | 文件系统落盘、元数据管理（含 industry/currency）、DuckDB 指标存储（含质量视图层） | 复用 + 扩展 CompanyMeta + 新增 MetricStore |
 | **Downloader 层** | 远端财报发现与 PDF 下载 | 完全复用 |
 | **Tools 层** | 财报读取工具 + 指标写入工具（值格式解析通过 schema + prompt 约束）（两条路径共用） | 复用只读工具 + 新增写工具 |
-| **Extraction 层** | 自动提取 pipeline（prompt 分层解析 + 模板变量注入 + 值提取规则 + Agent 执行器） | **新建** |
+| **Extraction 层** | 自动提取 pipeline（prompt 分层解析 + 模板变量注入 + 值提取规则 + Agent 执行器），绕过 Host 直调 AsyncAgent（有意偏离，见 §1.4） | **新建** |
 | **Scene 层** | 交互场景 prompt 装配 | 复用 interactive scene + 可选新增 scene |
 | **质量视图层** | stg_metrics（科目映射 + 单位归一化）→ int_metrics（勾稽校验 + quality_flag），DuckDB 实时视图，dayu-agent 维护 | **新建** |
 | **dbt 衍生层** | fct_*（ROE / 毛利率 / 增速等），source 为 `int_metrics` | **新建** |
@@ -361,11 +420,11 @@ end note
 
 1. **直接扩展，不新建项目**：所有改动在 dayu-agent 内部完成
 2. **引擎替换，不改接口**：MinerU 替换 Docling 只改底层实现，上层通过配置驱动选择
-3. **Host 托管一切**：指标提取和人工修正都走 Host 托管，享有 Session/Run/并发/事件/Cancel/Resume
-4. **Agent 驱动 LLM**：通过 Agent + scene + 工具注入实现，不绕过 Host 直调 LLM API
+3. **Host 托管 Chat 路径**：人工修正走 Host 托管，享有 Session/Run/并发/事件/Cancel/Resume；自动提取绕过 Host 直调 Agent（有意偏离，见 §1.4）
+4. **Agent 驱动 LLM**：通过 Agent + scene + 工具注入实现。Chat 路径不绕过 Host 直调 LLM API；自动提取为 Prefect → Agent 直通链路（有意偏离，见 §1.4）
 5. **ProcessorRegistry 自动路由**：产出物后缀变化后，processor 自动切换，不需要改 processor 层代码
 6. **读写工具分离**：只读工具标签 `fins`，写工具标签 `fins_write`，通过 scene manifest 控制启用
-7. **Prefect 编排管线操作，Host 托管 Agent 交互**：Prefect 负责 download/process/指标提取等管线操作的编排、重试、并发、调度；Host 负责 LLM Agent 交互的 Session/Run/并发/取消/恢复。两者职责不重叠。
+7. **Prefect 编排管线 + 自动提取，Host 治理 Chat 交互**：Prefect 负责 download/process/指标提取等管线操作的编排、重试、并发、调度；Host 负责 Chat 路径的 Agent 执行治理（run 记录审计、`llm_api` lane 并发治理、cancellation bridge）。自动提取路径的 LLM 并发由 Prefect task concurrency 控制（有意偏离，见 §1.4），两套并发治理并行但互不干扰。
 8. **元数据跨阶段流转**：`CompanyMeta`（ticker/market/company_id/ticker_aliases/industry/currency）和 source `meta.json`（form_type/fiscal_year/fiscal_period）在下载阶段写入，转换阶段更新 `primary_document`，提取阶段读取注入 prompt 模板。不重复存储、不跨源猜测。
 9. **Ticker 归一化是 market 的唯一真源**：`market` 由 `normalize_ticker()` 从 ticker 形态自动推导，不需要 CLI 显式传入 `--market`。`industry` / `currency` 与 `market` 并列存储在 `CompanyMeta` 中，三者共同构成指标提取的上下文变量。
 10. **Prompt 分层个性化**：指标提取 prompt 按 per-stock > market+industry > market > generic 四级分层查找，支持按市场、行业甚至单个股票定制提取指引，fallback 到通用模板。
@@ -396,12 +455,15 @@ processor 路由: DoclingProcessor.supports() 匹配 _docling.json 后缀
 
 ### 3.2 替换后的 MinerU 调用链
 
+MinerU 提供云端精准解析 API（见 https://mineru.net/apiManage/docs），无需本地部署模型。调用链如下：
+
 ```
 CnPipeline.__init__()
   └─ 默认注入 convert_pdf_bytes_to_markdown_bytes  (fins/mineru_export.py)
-      └─ PDF 拆分（大 PDF 按页数阈值切分）
-          └─ MinerU 转换（每个分片 PDF → Markdown）
-              └─ Markdown 合并（拼接分片 Markdown + 页码对齐）
+      └─ _call_mineru_api(raw_data) → Markdown 结果
+          ├─ HTTP POST 上传 PDF 到 MinerU API
+          ├─ 等待 API 解析完成（轮询或回调）
+          └─ 下载 Markdown 结果
 
 产出物: {document_id}.md  →  blob 仓储
 source meta: primary_document 指向 .md
@@ -410,27 +472,29 @@ processor 路由: MarkdownProcessor.supports() 匹配 .md 后缀（自动切换�
 
 ### 3.3 新建文件
 
-#### 3.3.1 `dayu/fins/mineru_export.py`（~250 行）
+#### 3.3.1 `dayu/fins/mineru_export.py`（~120 行）
 
-MinerU 转换模块，对标 `docling_export.py` 的职责：
+MinerU 云 API 客户端封装，对标 `docling_export.py` 的职责：
 
 ```
 公开 API:
   - convert_pdf_bytes_to_markdown_bytes(raw_data: bytes, stream_name: str) -> bytes
-    将 PDF 字节流转为 Markdown 字节流，内含 PDF 拆分 → MinerU 转换 → Markdown 合并
+    将 PDF 字节流通过 MinerU 云 API 转为 Markdown 字节流
 
   - convert_pdf_bytes_to_markdown_text(raw_data: bytes, stream_name: str) -> str
     返回 Markdown 字符串（便捷封装）
 
 内部实现:
-  - _split_pdf_by_page_threshold(raw_bytes, max_pages) -> list[bytes]
-    按 页数阈值 拆分大 PDF
+  - _call_mineru_api(pdf_bytes: bytes, api_key: str, *, timeout: float) -> bytes
+    HTTP POST 上传 PDF → 等待解析 → 返回 Markdown 结果。
+    支持异步轮询（大 PDF 解析可能需要较长时间）
 
-  - _convert_single_pdf_with_mineru(pdf_bytes, stream_name) -> str
-    单个 PDF 分片的 MinerU 转换
+  - _poll_task(task_id: str, api_key: str, *, poll_interval: float, timeout: float) -> str
+    轮询 MinerU 异步解析任务直到完成，返回 Markdown 文本
 
-  - _merge_markdown_fragments(fragments: list[str], page_offsets: list[int]) -> str
-    合并多个 Markdown 分片，保持页码连续性
+配置:
+  - run.json 新增 mineru_api_key / mineru_api_timeout（参考 run.json 其他 API key 管理方式）
+  - mineru_export.py 从配置读取 api_key，不硬编码
 ```
 
 #### 3.3.2 `dayu/fins/conversion_engine.py`（~40 行）
@@ -492,7 +556,10 @@ def resolve_conversion_function(engine: ConversionEngineType) -> PdfToConvertedB
    - 新下载的财报使用 MinerU，产出 `.md`，由 `FinsMarkdownProcessor` 处理
    - 两种格式的文档可以共存
 
-3. **MinerU 依赖**：MinerU 需要额外安装（`pip install magic-pdf` 等），建议在 `pyproject.toml` 中作为可选依赖管理
+3. **MinerU 云 API 依赖**：使用 MinerU 云端精准解析 API（https://mineru.net/apiManage/docs），需管理 API key 和调用配额。建议在 `run.json` 中增加 `mineru_api_key` 配置项（与现有 API key 管理方式保持一致）。`pyproject.toml` 无需新增依赖（仅使用标准库 `http.client` / `urllib` 或已有 `httpx`）
+4. **MinerU API 性能**：中文年报动辄 200+ 页，API 解析时间可能较长（异步模式需轮询）。需设置合理的超时（建议 300s），Prefect task 的 retry 策略需区分 API 超时和网络错误
+5. **MinerU API 费用**：需评估 API 调用费用模型（按页/按次），批量处理时的成本估算。建议在 `run.json` 中配置 `mineru_api_max_pages` 参数，超过阈值时发出警告或切换备选引擎
+6. **Docling 作为备选引擎**：`conversion_engine.py` 保留 Docling 选项，若 MinerU API 不可用（网络故障/配额超限），可通过配置切换回 Docling。`fins/docling_export.py` 和 `docling_runtime.py` 保留不删
 
 ---
 
@@ -514,6 +581,8 @@ def resolve_conversion_function(engine: ConversionEngineType) -> PdfToConvertedB
 3. 自动提取需要的是：给定 prompt 模板 + 文档 → LLM 调用工具提取指标 → 持久化，这是一个单次 LLM 调用 + 工具循环，不需要多轮会话
 
 因此，自动提取走**独立的 Agent 执行路径**：构建轻量级 `AsyncAgent` + `ToolRegistry`（只含 fins_read_tools + fins_write_tools），用固定的提取 prompt 驱动 LLM，工具循环完成后直接持久化指标。
+
+> **架构偏离说明**：自动提取绕过 Host 直调 AsyncAgent，与 CLAUDE.md 中"Host 对 Agent 生命周期是强约束真源"的架构硬约束存在偏离。这是**有意决策**，理由见 §1.4。
 
 ### 4.2 自动提取路径（Prefect 驱动）
 
@@ -542,8 +611,14 @@ Prefect batch_extract_metrics_flow
 | 会话管理 | 无（单次执行） | 多轮会话（Host 两层记忆） |
 | Scene | 不需要 scene manifest | `interactive` scene |
 | 取消/恢复 | Prefect task 取消 | Host pending turn resume |
-| prompt 来源 | `prompts/tasks/extract_metrics.md`（任务级 prompt） | 用户输入 + scene fragments 装配 |
+| prompt 来源 | `dayu/config/prompts/tasks/extract_metrics.md`（任务级 prompt） | 用户输入 + scene fragments 装配 |
 | 工具集 | `fins` + `fins_write`（只含提取相关工具） | `fins` + `fins_write` + `web` + `ingestion`（全量工具） |
+
+**自动提取质量监控**：
+- Prefect 批量提取完成后，`ExtractResult` 记录提取总数和耗时
+- 建议在 Prefect flow 中加入提取质量摘要：跳过科目数（LLM 主动跳过的"不适用"/"N/A"等非数值项）、写入成功数、单文档提取耗时
+- 若跳过率过高（>50%）或 extraction duration 异常，通过 Prefect 状态 / 日志发出告警
+- 一期不做自动告警，但 `ExtractResult` 结构预留 `skipped_count` / `error_count` 字段，便于二期接入监控
 
 ### 4.3 人工校验修正路径（Chat 驱动）
 
@@ -659,7 +734,7 @@ DuckDB `raw_metrics` 表的 `source` 字段区分提取来源：
 
 MetricStore 写入防御：`upsert_metric` 在写入 DuckDB 前做类型检查——如果 `value` 不是 `int` / `float`，直接拒绝写入并返回错误。这是最后一道防线，防止 LLM 绕过 schema 约束。
 
-### 4.3 FinsToolService 扩展
+### 4.6 FinsToolService 扩展
 
 当前 `FinsToolService` 完全只读。需要扩展写能力：
 
@@ -692,7 +767,7 @@ FinsToolService.__init__ 新增注入:
 
 | 方案 | 存储 | 写入路径 | DuckDB 读取 | 修正追溯 | 复杂度 |
 |------|------|---------|-------------|---------|--------|
-| A：散落 JSON（当前 PRD 方案） | per-document `metrics.json` | FinsToolService 直接写文件 | DuckDB 逐文件 `read_json_auto()`，扫描慢 | JSON 内嵌 corrections 数组 | 低 |
+| A：散落 JSON | per-document `metrics.json` | FinsToolService 直接写文件 | DuckDB 逐文件 `read_json_auto()`，扫描慢 | JSON 内嵌 corrections 数组 | 低 |
 | B：集中 SQLite | 单个 `workspace/metrics.db` | FinsToolService 写 SQLite | DuckDB `ATTACH` SQLite，SQL 查询 | SQL 表结构追溯 | 中 |
 | **C：DuckDB 原生** | 单个 `workspace/metrics.duckdb` | FinsToolService 写 DuckDB | **原生查询，零开销** | SQL 表结构追溯 | 中 |
 
@@ -738,6 +813,10 @@ CREATE TABLE raw_metrics (
     -- 唯一约束：同一文档同一科目同一报告期只允许一条
     UNIQUE(ticker, document_id, metric_name, period)
 );
+-- 写入方式：INSERT ... ON CONFLICT(ticker, document_id, metric_name, period)
+-- DO UPDATE SET value=excluded.value, source=excluded.source, updated_at=NOW()
+-- 使用 ON CONFLICT DO UPDATE 而非 INSERT OR REPLACE，
+-- 目的是保留 raw_metrics.id 不变，维护 corrections.raw_metric_id 外键完整性。
 
 -- 修正记录表：人工修正不覆盖原始值，追加修正记录
 CREATE TABLE corrections (
@@ -949,9 +1028,19 @@ class MetricStore:
     def upsert_metric(self, req: MetricUpsertRequest) -> MetricUpsertResult:
         """写入或修正指标。
 
-        - source 为 auto_extracted / chat_extracted 时：INSERT OR REPLACE 到 raw_metrics
-        - source 为 chat_corrected 时：保持 raw_metrics 不变，追加到 corrections 表
-        - value 类型校验：非 int / float 直接拒绝写入，返回错误
+        - 提取（req.original_value 为空）：
+          使用 INSERT ... ON CONFLICT(ticker, document_id, metric_name, period)
+          DO UPDATE SET value=..., source=..., updated_at=NOW()
+          保留 raw_metrics.id 不变，维护 corrections FK 完整性。
+          source 为 "auto_extracted"（Prefect 批量提取）
+          或 "chat_extracted"（用户通过 Chat 重新提取）。
+        - 修正（req.original_value 非空且 req.correction_reason 非空）：
+          先按 (ticker, document_id, metric_name, period) 查找 raw_metrics 行。
+          若行存在：追加一条 corrections 记录（raw_metric_id → 找到的行 id），
+          raw_metrics.value 不更新（修正值走 effective_metrics 视图 COALESCE 逻辑）。
+          若行不存在：返回错误（不能修正不存在的指标）。
+        - value 类型校验：非 int / float 直接拒绝写入，返回错误。
+        - 不存在 "chat_corrected" 这一 source 值——修正通过 corrections 表追记实现。
         """
         ...
 
@@ -984,7 +1073,7 @@ class MetricStore:
         ...
 ```
 
-#### 4.7.7 存储位置
+#### 4.7.8 存储位置
 
 ```
 workspace/
@@ -1512,7 +1601,7 @@ dayu-agent 的执行路径分为两类，Prefect 只包装第一类：
 | 路径类型 | 执行方式 | Prefect 包装 | 原因 |
 |---------|---------|-------------|------|
 | **管线操作**（direct operation） | `FinsRuntime.execute()` → `CnPipeline.download()` / `process()` 等 | **是** | 纯 IO/计算操作，无 LLM 交互，无 Host 状态机 |
-| **自动指标提取**（agent execute） | `AsyncAgent` + `ToolRegistry` 直接执行，不经过 Host/ChatService | **是** | 程序驱动，无人工介入，不需要多轮会话/pending turn/resume |
+| **自动指标提取**（agent execute） | `AsyncAgent` + `ToolRegistry` 直接执行，不经过 Host/ChatService | **是** | 程序驱动，无人工介入，不需要多轮会话/pending turn/resume（有意偏离，见 §1.4） |
 | **人机交互**（agent stream） | `Host.run_agent_stream()` → `AsyncAgent` → LLM + 工具调用 | **否** | Host 强约束管理 Session/Run/Cancel/Resume/Pending Turn，人机交互不可替代 |
 
 **管线操作**包括：
@@ -1524,7 +1613,7 @@ dayu-agent 的执行路径分为两类，Prefect 只包装第一类：
 | 预处理 | `process` / `process_filing` / `process_material` | `pipeline.process()` / `pipeline.process_filing()` | 是 |
 | 批量上传脚本生成 | `upload_filings_from` | `generate_upload_filings_script()` | 是 |
 
-**自动指标提取**包括（Prefect 包装，但不经过 Host）：
+**自动指标提取**包括（Prefect 包装，不经 Host）：
 
 | 操作 | 执行路径 | 适合 Prefect task |
 |------|---------|------------------|
@@ -1607,7 +1696,7 @@ note right of ExtractTask
      - get_financial_statement → 读取 .md
      - upsert_financial_metric → 写入 raw_metrics
        source="auto_extracted"
-  8. 不经过 Host/ChatService
+  8. 不经过 Host/ChatService（有意偏离，见 §1.4）
 end note
 
 note right of ChatPath
@@ -1621,14 +1710,24 @@ end note
 @enduml
 ```
 
-**关键决策：Prefect task 绕过 Host，直接调用 FinsRuntime / AsyncAgent**
+**关键决策：Prefect 不经过 UI → Service → Host 三层，直达 FinsRuntime / AsyncAgent（有意偏离项目架构约束）**
+
+Prefect 作为独立编排层，跳过 dayu-agent 的四层运行时链路，直接驱动底层组件。对比：
+
+| 路径 | 链路 | Host 参与 |
+|------|------|----------|
+| CLI download/process | `FinsService.submit()` → `host.run_operation_sync()` → `FinsRuntime` | 是（强制） |
+| Prefect download/process | `FinsRuntime.execute()` 直调 | 否 |
+| Chat extract | `ChatService` → `host.run_agent_stream()` → `AsyncAgent` | 是（强制） |
+| Prefect extract | `ExtractionRunner` → `AsyncAgent.execute()` 直调 | 否 |
 
 理由：
 1. 管线操作（download/process/upload）是纯 IO/计算操作，不涉及 LLM 交互、不需要 pending turn 恢复
 2. 自动指标提取是程序驱动的单次 LLM + 工具循环，不需要多轮会话、不需要 pending turn / resume / 两层记忆——这些是 Host 为人机交互提供的能力
-3. Host 的 `run_operation_sync` / `run_operation_stream` 为管线操作提供的只是 run registry + concurrency permit + cancellation bridge，这些能力 Prefect 已经以更完善的方式提供
-4. 绕过 Host 避免了 Prefect task 跨进程与 Host SQLite 状态不一致的问题
-5. `FinsRuntime.execute()` 是 `FinsService.submit()` 的内层，不需要 session 解析、scene preparation 等上层逻辑
+3. Host 的 `run_operation_sync` 提供的 run registry、concurrency permit、cancellation bridge 等治理能力，Prefect 分别以 task 状态追踪、task concurrency、task 取消等机制等效覆盖
+4. 不经过 Service/Host 避免了 Prefect task 跨进程与 Host SQLite 状态不一致的风险
+5. `FinsRuntime` 和 `AsyncAgent` 均可脱离 Service/Host 独立构建和调用，不被分层约束锁死
+6. 这是对 CLAUDE.md 架构分层约束的**有意偏离**（详细记录见 §1.4）。两套并发治理（Host `llm_api` lane 管 Chat、Prefect concurrency 管 batch）并行运行，互不干扰
 
 **取消检查**：`FinsRuntime.execute()` 接受 `cancel_checker` 参数，Prefect task 内部可构造一个检查 Prefect task 状态的 cancel_checker 传入。
 
@@ -1846,7 +1945,7 @@ dayu-agent 有内置的并发 lane 机制（`cn_download` / `hk_download` 默认
 |------|----------------|------------------|
 | 巨潮 PDF 下载 | `cn_download: 1` | `download_single_ticker_task.with_options(concurrency=1)` 或 Prefect work pool 的 concurrency limit |
 | 港股 PDF 下载 | `hk_download: 1` | 同上，区分 A/H 股的 ticker 分别限流 |
-| MinerU 转换 | 无限制（CPU/GPU 瓶颈自然限流） | `process_single_ticker_task` 的 concurrency 按 CPU/GPU 资源设置 |
+| MinerU 转换 | 无限制（API 速率自然限流） | `process_single_ticker_task` 的 concurrency 按 API 速率限制设置 |
 | LLM API | `llm_api: 8`（Host 自治 lane） | 自动提取 task 绕过 Host，使用 Prefect task concurrency 控制 LLM 并发数；人工修正走 Chat 时 Host lane 自然生效 |
 
 #### 5.5.2 asyncio 兼容性
@@ -1863,6 +1962,7 @@ dayu-agent 有 `StateDirSingleInstanceLock`（进程级单例锁）和 workspace
 - **同一 ticker 的 task 不并发**：Prefect task 按 ticker 维度天然串行（同一 ticker 的 download → process → extract 有依赖关系）
 - **不同 ticker 的 task 可并发**：不同 ticker 的文件路径不交叉，无锁冲突
 - **workspace 初始化只需一次**：`build_flow_runtime()` 在 flow 入口调用一次，task 共享 `FlowRuntimeContext`
+- **Prefect 默认单进程执行**：Prefect 2.x 默认 task 在同一进程内执行，`StateDirSingleInstanceLock` 在 `build_flow_runtime()` 初始化时获取一次即可。若后续使用 Prefect work pool 多 worker（子进程模式），需确保 `build_flow_runtime()` 在每个 worker 进程中独立调用；workspace 锁在同一进程内不冲突，跨进程文件锁保护不串行化不同 ticker 的操作
 
 #### 5.5.4 缓存策略
 
@@ -1900,7 +2000,7 @@ extract_single_document_task
 | Scene | 不需要 | `interactive` scene |
 | 取消/恢复 | Prefect task 取消 | Host pending turn resume |
 | 人工介入 | **无** | 有（用户逐轮输入） |
-| prompt | `prompts/tasks/extract_metrics.md` | 用户输入 + scene fragments |
+| prompt | `dayu/config/prompts/tasks/extract_metrics.md` | 用户输入 + scene fragments |
 
 这种分离确保了：
 - 自动提取可以无人值守批量执行，适合定时调度
@@ -1921,7 +2021,7 @@ extract_single_document_task
 ### 5.7 不做的事情
 
 1. **不包装 interactive / prompt / write 命令**：这些是人机交互路径，由 Host 强约束管理，不适合 Prefect task
-2. **自动提取不经 Host**：Prefect 自动提取 task 直接构建 `AsyncAgent` 执行，不经过 Host/ChatService，因为无人机交互不需要 pending turn / resume / 两层记忆
+2. **自动提取不经 Host**：Prefect 自动提取 task 直接构建 `AsyncAgent` 执行，不经过 Host/ChatService，因为无人机交互不需要 pending turn / resume / 两层记忆（有意偏离，见 §1.4）
 3. **不替换 dayu-agent 的 Host 并发治理**：Host 的 `llm_api` lane 在人工修正 Chat 路径中仍然生效，Prefect 不干预
 4. **不替换 dayu-agent 的 CLI**：`dayu-cli download` / `process` 等单次命令仍然保留，Prefect flow 是上层批量编排
 5. **不做跨节点分布式调度**：一期使用 Prefect 单机模式（`prefect deploy` + 本地 work pool），不做 K8s/云端分布式部署
@@ -2033,7 +2133,7 @@ dayu-agent 和 dbt 共用同一个 DuckDB 文件（`workspace/metrics.duckdb`）
 | dbt | `int_metrics` 视图（通过 source 定义） | `fct_*` model（视图或表） |
 | Prefect dbt flow | 无 | 触发 `dbt run`（dbt 内部执行写入） |
 
-DuckDB 支持多进程并发读 + 单进程写。dayu-agent 的写入（逐条 upsert + 视图定义）和 dbt 的写入（批量 `CREATE TABLE AS SELECT`）不会同时操作同一张表，无写冲突。
+DuckDB 支持多进程并发读 + 单进程写（文件级锁）。dayu-agent 的写入（逐条 upsert + 视图定义）和 dbt 的写入（批量 `CREATE TABLE AS SELECT`）操作的表不同，不存在行级冲突。但并发写操作会受 DuckDB 文件锁串行化——MetricStore.upsert_metric 写入与 dbt run 同时发生时可能遇到锁等待。建议 MetricStore 实现短超时 + 自动重试（最多 3 次，间隔 100ms），并在 dbt flow 调度时避开批量提取高峰期。`fct_*` model 使用 DuckDB VIEW（而非 TABLE）可减少写冲突点。
 
 **关键约束**：
 - dbt model **只读** `int_metrics` 视图，不直接访问 `raw_metrics` / `corrections` 表，也不直接访问 `effective_metrics` / `stg_metrics`
@@ -2266,7 +2366,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 
 | 模块 | 新建代码 | 修改代码 | 测试代码 | 合计 |
 |------|---------|---------|---------|------|
-| MinerU 转换模块 | ~250 行 | — | ~150 行 | ~400 行 |
+| MinerU 转换模块（云 API 客户端） | ~120 行 | — | ~100 行 | ~220 行 |
 | 转换引擎抽象 | ~40 行 | — | ~30 行 | ~70 行 |
 | Pipeline 泛化 | — | ~200 行 | ~300 行 | ~500 行 |
 | CompanyMeta 扩展（industry/currency + CLI） | — | ~160 行 | ~100 行 | ~260 行 |
@@ -2278,13 +2378,13 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | dbt 项目（fct_* model） | ~250 行 | — | ~60 行 | ~310 行 |
 | metric_mapping / unit_conversion CSV + CLI 导入 | ~50 行 | ~15 行 | ~30 行 | ~95 行 |
 | 配置更新 | ~10 行 | ~15 行 | — | ~25 行 |
-| **合计** | **~2390 行** | **~555 行** | **~1250 行** | **~4195 行** |
+| **合计** | **~2260 行** | **~555 行** | **~1200 行** | **~4015 行** |
 
 ### 7.2 分阶段实施计划
 
 | 阶段 | 内容 | 依赖 | 预估 |
 |------|------|------|------|
-| **P1** | MinerU 转换模块 + 引擎抽象 | 无 | 3 天 |
+| **P1** | MinerU 云 API 客户端 + 引擎抽象 | 无 | 2 天（含 API 对接调试） |
 | **P2** | Pipeline 泛化 + source upsert 校验放宽 | P1 | 2 天 |
 | **P3** | CompanyMeta 扩展 industry/currency + CLI 参数 + 传递链路 | P2 | 2 天 |
 | **P4** | 写工具 + MetricStore(DuckDB) + 质量视图层 + FinsToolService 扩展 | P3 | 4 天 |
@@ -2295,7 +2395,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | **P9** | Prefect 自动指标提取 flow + 定时调度 + CLI 集成 | P4, P5, P8 | 2 天 |
 | **P10** | dbt 项目（fct_* model） + metric_mapping/unit_conversion CSV + 衍生加工 flow + 端到端 pipeline | P4, P9 | 3 天 |
 | **P11** | 测试补齐 + pyright 通过 | P1-P10 | 3 天 |
-| **合计** | | | **~27 天（5.5 周）** |
+| **合计** | | | **~26 天（~5 周）** |
 
 ### 7.3 与新建独立项目对比
 
@@ -2313,7 +2413,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | Scene 体系 | 新建 | 复用 + 扩展 |
 | 调度层 | 新建调度框架（~2000 行） | 集成 Prefect（~810 行） |
 | 衍生加工 | 新建计算引擎（~1500 行） | 集成 dbt + DuckDB（~250 行 fct_* model） |
-| **预估总工作量** | **12 周** | **4.5 周** |
+| **预估总工作量** | **12 周** | **~5 周** |
 | **复用率** | 0% | ~89% |
 
 ---
@@ -2349,7 +2449,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | 验证项 | 方法 |
 |--------|------|
 | 自动提取（无人工） | `dayu-cli flow batch-extract` 执行后，确认 DuckDB `raw_metrics` 表有数据，source 全部为 `auto_extracted` |
-| 自动提取无 Host | 确认 extract task 执行过程中 Host SQLite 无新增 run 记录 |
+| 自动提取无 Host | 确认 extract task 执行过程中 Host SQLite 无新增 run 记录（有意偏离，见 §1.4） |
 | 元数据注入 | 检查 extract task 的 prompt 中 `{{market}}` / `{{industry}}` / `{{currency}}` / `{{fiscal_year}}` 等变量已正确替换 |
 | Prompt 分层解析 | 放置 `extract_metrics__cn.md`，确认 A 股提取使用该模板而非 generic；放置 `extract_metrics__ticker__600519.md`，确认贵州茅台使用 per-stock 模板 |
 | DuckDB 读写 | FinsToolService `upsert_metric` 写入后，`list_metrics` 能读回有效值（含 `quality_flag`） |
@@ -2369,7 +2469,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | 勾稽引导修正 | Chat 中 `list_extracted_metrics` 返回 `quality_flag = balance_mismatch`，LLM 主动提示用户并引导修正 |
 | Streamlit 展示 | filing_tab 中展示已提取指标（标注 source + quality_flag）、修正历史、自动提取 flow 状态 |
 
-### 8.3 Prefect 调度验证
+### 8.4 Prefect 调度验证
 
 | 验证项 | 方法 |
 |--------|------|
@@ -2381,9 +2481,10 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | 缓存命中 | 重复执行同一 flow，确认 download task 被缓存跳过 |
 | 定时调度 | `dayu-cli flow schedule-download --cron "*/5 * * * *"` 部署后，确认 Prefect 按 cron 定时触发 |
 | 自动提取无人工 | 确认 extract task 全程无人工介入，LLM 工具循环自主完成提取和持久化 |
-| 自动提取不经 Host | 确认 extract task 不创建 Host session/run，不写入 Host SQLite |
+| 自动提取不经 Host | 确认 extract task 不创建 Host session/run，不写入 Host SQLite（有意偏离，见 §1.4） |
+| Prefect LLM 并发控制 | 确认 extract task 的 LLM 调用受 Prefect task concurrency 限制，不依赖 Host llm_api lane |
 
-### 8.4 质量视图层验证
+### 8.5 质量视图层验证
 
 | 验证项 | 方法 |
 |--------|------|
@@ -2396,7 +2497,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | 修正实时反映 | Chat 修正后，不执行任何 run，直接查 `int_metrics` 确认 `quality_flag` 已从 `balance_mismatch` 变为 `NULL` |
 | CLI 导入映射 | `dayu-cli flow import-mapping` 后，确认 `metric_mapping` / `unit_conversion` 表有数据 |
 
-### 8.5 衍生指标加工验证
+### 8.6 衍生指标加工验证
 
 | 验证项 | 方法 |
 |--------|------|
@@ -2409,7 +2510,7 @@ dayu-cli flow import-mapping                  # 导入 metric_mapping.csv + unit
 | 衍生加工 flow | `dayu-cli flow derive` 执行后，确认 `fct_*` model 全部构建成功 |
 | 端到端 pipeline | `dayu-cli flow full-pipeline --tickers 600519` 完整执行 download → process → extract → derive，确认衍生指标可查 |
 
-### 8.5 全局验证
+### 8.7 全局验证
 
 | 验证项 | 方法 |
 |--------|------|
