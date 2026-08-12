@@ -91,6 +91,56 @@ Chat 链路（标准四层）：
   - 一律按全新 schema 起库处理；禁止旧库兼容读取、兼容测试，除非当前任务明确要求兼容升级；
   - 同时必须将旧库迁移动作作为 `workspace_migrations` 的一个插件进入`dayu-cli init` 流程。
 
+### MinerU 云端转换契约
+
+> 触发：新增外部云 API 集成（MinerU v4 精准解析），命中 code-spec 深度要求。实现见 `dayu/fins/mineru_export.py`。
+
+#### 1. 签名
+
+```python
+# dayu/fins/mineru_export.py
+def convert_pdf_bytes_to_markdown_bytes(raw_data: bytes, stream_name: str) -> bytes: ...
+```
+
+- `raw_data`：PDF 字节流；`stream_name`：文件名（须带正确后缀，API 按后缀识别格式）。
+- 返回 Markdown UTF-8 字节；签名对齐 Docling 收敛点 `Callable[[bytes, str], bytes]`，便于后续 pipeline 注入复用。
+
+#### 2. 契约
+
+- 环境变量：`MINERU_API_KEY`（常量 `dayu/contracts/env_keys.py::MINERU_API_KEY_ENV`），缺失抛 `MineruApiError`。
+- 认证头：`Authorization: Bearer <token>`。
+- 调用链（均为同步 httpx）：
+  1. `POST /api/v4/file-urls/batch`，body `{"files": [{"name": <stream_name>}], "model_version": "vlm", "enable_formula": true, "enable_table": true, "language": "ch"}` → `data.batch_id` + `data.file_urls[]`。
+  2. `PUT` 上传 PDF 二进制到 `file_urls[0]`，**不设 Content-Type**。
+  3. 轮询 `GET /api/v4/extract-results/batch/{batch_id}`，间隔 5s、总超时 600s，直到 `done`/`failed`。
+  4. 下载 `data.extract_result[0].full_zip_url` zip → 解压（**必须路径穿越防护**：两侧 `resolve()` 后 `relative_to` 校验）→ 读 `full.md`（回退任意 `*.md`）。
+
+#### 3. 错误矩阵
+
+| 条件 | 错误类型 |
+|------|---------|
+| `MINERU_API_KEY` 未设置 | `MineruApiError`（含配置提示） |
+| API `code` 为 A0202 / A0211 / -60018 / -60008 | `MineruApiError`（映射用户可读中文提示） |
+| HTTP 非 200 / 网络异常 | `MineruApiError` |
+| 轮询超过 600s 仍未 done | `MineruPollTimeoutError` |
+| `state == "failed"` | `MineruApiError`（附 `err_msg`） |
+| zip 含路径穿越成员 / 无任何 `.md` | `MineruResultError` |
+
+#### 4. Good / Base / Bad
+
+- Good：上传 URL → PUT → 轮询一次 done → zip 含 `full.md` → 返回 markdown。
+- Base：多轮轮询（pending/running/converting）后 done。
+- Bad：缺 env var；API 错误码；HTTP 错误；网络异常；轮询超时；failed；zip 路径穿越；zip 缺 markdown。
+
+#### 5. CLI
+
+- `dayu-cli convert --pdf <path> --output <out.md>`；`--pdf`/`--output` 必选，输出父目录自动创建。不做转换参数 CLI 可配、不做批量。
+
+#### 6. 测试要点
+
+- MockTransport 覆盖：成功链路、请求头/请求体断言、多轮轮询、缺 env、错误码、HTTP 状态、网络错误、轮询超时、failed、路径穿越、缺 markdown、markdown 回退。
+- CLI：parse 装配（`--pdf`/`--output` 必填）、命令 handler 成功/失败路径。
+
 ### 测试与验证
 
 - 每次代码修改后，都必须补齐或更新对应测试，并优先验证通过。
