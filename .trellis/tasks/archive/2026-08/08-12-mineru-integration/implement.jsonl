@@ -1,0 +1,3 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/backend/index.md", "reason": "后端开发硬约束：中文 docstring、禁止 Any、pyright、测试覆盖率、README 同步"}
+{"file": ".trellis/tasks/08-12-mineru-integration/research/mineru-api.md", "reason": "MinerU v4 精准 API 接口细节：认证、上传、轮询、结果 zip 结构、限流错误码"}
